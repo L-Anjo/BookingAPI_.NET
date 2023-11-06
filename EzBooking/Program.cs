@@ -16,6 +16,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+int g = 4;
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
