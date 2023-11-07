@@ -21,9 +21,26 @@ A plataforma web será capaz de gerir informações sobre alojamentos, incluindo
 1. API Logs
   
 
-2. Seed Database
+# Database
+
+1. Seed Database
 cd/EzBooking
 dotnet run seeddata
+
+2. Migrations:
+Package Manager (Criar Migrations): 
+```shell
+Add-Migration InitialCreate
+```
+```shell
+Package Manager (Inserir na BD Migrations): Update-Database
+```
+
+3.SQL SERVER:
+Sessão:
+ - Server: bkbd.database.windows.net
+ - Username: rootadmin
+ - Password: Root123!
 
 
 5. Run tests
@@ -36,21 +53,6 @@ dotnet run seeddata
    http://api.localhost/
 
    http://api.localhost/docs
-
-# Database management
-
-   http://phpmyadmin.localhost/
-
-Migrations:
-Package Manager (Criar Migrations): Add-Migration InitialCreate
-Package Manager (Inserir na BD Migrations): Update-Database
-
-
-SQL SERVER:
-Sessão:
-Server: bkbd.database.windows.net
-Username: rootadmin
-Password: Root123!
 
 
 # Contribute
