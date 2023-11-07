@@ -1,92 +1,86 @@
-﻿using EzBooking.Data;
+﻿using System;
+using System.Collections.Generic;
 using EzBooking.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace EzBooking
+namespace EzBooking.Data
 {
-
-
-    namespace EzBooking
+    public class Seed
     {
-        public class Seed
+        private readonly DataContext dataContext;
+
+        public Seed(DataContext context)
         {
-            private readonly DataContext dataContext;
+            this.dataContext = context;
+        }
 
-            public Seed(DataContext context)
+        public void SeedDataContext()
+        {
+
+            // Verifique se os dados já foram adicionados.
+            if (dataContext.PostalCodes.Any() || dataContext.StatusHouses.Any() || dataContext.Houses.Any())
             {
-                this.dataContext = context;
+                return; // O banco de dados já está populado.
             }
 
-            public void SeedDataContext()
+            // Adicione dados de exemplo aqui
+            var postalCode1 = new PostalCode
             {
-                if (!dataContext.Houses.Any())
-                {
-                    // Popule a tabela House com alguns dados iniciais
-                    var houses = new House[]
-                    {
-                    new House
-                    {
-                        name = "Casa 1",
-                        doorNumber = 123,
-                        // Outros campos
-                    },
-                    new House
-                    {
-                        name = "Casa 2",
-                        doorNumber = 456,
-                        // Outros campos
-                    },
-                        // Adicione mais casas conforme necessário
-                    };
+                postalCode = 4750,
+                concelho = "Barcelos",
+                district = "Braga"
+            };
 
-                    dataContext.Houses.AddRange(houses);
-                    dataContext.SaveChanges();
-                }
+            var postalCode2 = new PostalCode
+            {
+                postalCode = 4500,
+                concelho = "Matosinhos",
+                district = "Porto"
+            };
 
-                if (!dataContext.StatusHouses.Any())
-                {
-                    // Popule a tabela StatusHouse com alguns dados iniciais
-                    var statusHouses = new StatusHouse[]
-                    {
-                    new StatusHouse
-                    {
-                        name = "Disponível",
-                    },
-                    new StatusHouse
-                    {
-                        name = "Reservado",
-                    },
-                        // Adicione mais status conforme necessário
-                    };
+            var statusHouse1 = new StatusHouse
+            {
+                name = "Suspensa"
+            };
 
-                    dataContext.StatusHouses.AddRange(statusHouses);
-                    dataContext.SaveChanges();
-                }
+            var statusHouse2 = new StatusHouse
+            {
+                name = "Disponivel"
+            };
 
-                if (!dataContext.PostalCodes.Any())
-                {
-                    // Popule a tabela PostalCode com alguns dados iniciais
-                    var postalCodes = new PostalCode[]
-                    {
-                    new PostalCode
-                    {
-                        postalCode = 12345,
-                        concelho = "Lisboa",
-                        district = "Lisboa",
-                    },
-                    new PostalCode
-                    {
-                        postalCode = 54321,
-                        concelho = "Porto",
-                        district = "Porto",
-                    },
-                        // Adicione mais códigos postais conforme necessário
-                    };
+            var house1 = new House
+            {
+                name = "Example House 1",
+                doorNumber = 123,
+                floorNumber = 2,
+                price = 100.0,
+                guestsNumber = 4,
+                road = "Example Road 1",
+                propertyAssessment="dffddsf2",
+                sharedRoom = false,
+                PostalCode = postalCode1,
+                StatusHouse = statusHouse1
+            };
 
-                    dataContext.PostalCodes.AddRange(postalCodes);
-                    dataContext.SaveChanges();
-                }
-            }
+            var house2 = new House
+            {
+                name = "Example House 2",
+                doorNumber = 456,
+                floorNumber = 3,
+                price = 150.0,
+                guestsNumber = 6,
+                road = "Example Road 2",
+                propertyAssessment = "dffddsf3",
+                sharedRoom = false,
+                PostalCode = postalCode2,
+                StatusHouse = statusHouse2
+            };
+
+            dataContext.PostalCodes.AddRange(postalCode1, postalCode2);
+            dataContext.StatusHouses.AddRange(statusHouse1, statusHouse2);
+            dataContext.Houses.AddRange(house1, house2);
+
+            dataContext.SaveChanges();
         }
     }
-
 }

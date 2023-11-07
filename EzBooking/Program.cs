@@ -1,5 +1,4 @@
 using EzBooking.Data;
-using EzBooking.EzBooking;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

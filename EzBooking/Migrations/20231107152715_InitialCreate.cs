@@ -12,8 +12,7 @@ namespace EzBooking.Migrations
                 name: "PostalCodes",
                 columns: table => new
                 {
-                    postalCode = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    postalCode = table.Column<int>(type: "int", nullable: false),
                     concelho = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     district = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -44,12 +43,12 @@ namespace EzBooking.Migrations
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     doorNumber = table.Column<int>(type: "int", nullable: false),
                     floorNumber = table.Column<int>(type: "int", nullable: false),
-                    price = table.Column<double>(type: "float", nullable: false),
-                    priceyear = table.Column<double>(type: "float", nullable: false),
+                    price = table.Column<double>(type: "float", nullable: true),
+                    priceyear = table.Column<double>(type: "float", nullable: true),
                     guestsNumber = table.Column<int>(type: "int", nullable: false),
                     road = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     propertyAssessment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    codDoor = table.Column<int>(type: "int", nullable: false),
+                    codDoor = table.Column<int>(type: "int", nullable: true),
                     sharedRoom = table.Column<bool>(type: "bit", nullable: false),
                     postalCode = table.Column<int>(type: "int", nullable: false),
                     StatusHouseid = table.Column<int>(type: "int", nullable: false)

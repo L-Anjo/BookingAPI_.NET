@@ -15,7 +15,11 @@ namespace EzBooking.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<PostalCode>()
+                .Property(p => p.postalCode)
+                .ValueGeneratedNever();
 
         }
     }

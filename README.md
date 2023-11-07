@@ -22,8 +22,8 @@ A plataforma web será capaz de gerir informações sobre alojamentos, incluindo
   
 
 2. Seed Database
- 
-
+cd/EzBooking
+dotnet run seeddata
 
 
 5. Run tests
