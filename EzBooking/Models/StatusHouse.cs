@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace EzBooking.Models
 {
     public class StatusHouse
     {
-        public int id;
+        [Key]
+        public int id { get; set; }
         public string name;
         public ICollection<House> Houses;
     }

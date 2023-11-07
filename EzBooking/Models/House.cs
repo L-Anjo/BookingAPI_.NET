@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace EzBooking.Models
 {
     public class House
     {
-        public int id_house;
+        [Key]
+        public int id_house { get; set; }
         public string name;
         public int doorNumber;
         public int floorNumber;
