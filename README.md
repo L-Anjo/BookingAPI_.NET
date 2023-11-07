@@ -4,7 +4,6 @@ A plataforma web será capaz de gerir informações sobre alojamentos, incluindo
 # Getting Started
 1. Software dependencies
 
-
 # Screenshots
 
 
@@ -38,16 +37,21 @@ A plataforma web será capaz de gerir informações sobre alojamentos, incluindo
 
    http://api.localhost/docs
 
-
-# Admin User
-  ```
-  email: admin@bookingithere.com
-  Password: 123456
-  ```
-
 # Database management
 
    http://phpmyadmin.localhost/
+
+Migrations:
+Package Manager (Criar Migrations): Add-Migration InitialCreate
+Package Manager (Inserir na BD Migrations): Update-Database
+
+
+SQL SERVER:
+Sessão:
+Server: bkbd.database.windows.net
+Username: rootadmin
+Password: Root123!
+
 
 # Contribute
 
