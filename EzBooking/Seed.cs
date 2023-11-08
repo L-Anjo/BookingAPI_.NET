@@ -76,9 +76,28 @@ namespace EzBooking.Data
                 StatusHouse = statusHouse2
             };
 
+            var user1 = new User
+            {
+                name = "Pedro",
+                password = "password",
+                phone = "123456789",
+                token = "SDAD3Dasdsa2D2DAasdsASD",
+                status = 1
+            };
+
+            var user2 = new User
+            {
+                name = "Luis",
+                password = "password2",
+                phone = "987654321",
+                token = "SADassadw232esadDSADAds-2",
+                status = 1
+            };
+
             dataContext.PostalCodes.AddRange(postalCode1, postalCode2);
             dataContext.StatusHouses.AddRange(statusHouse1, statusHouse2);
             dataContext.Houses.AddRange(house1, house2);
+            dataContext.Users.AddRange(user1, user2);
 
             dataContext.SaveChanges();
         }
