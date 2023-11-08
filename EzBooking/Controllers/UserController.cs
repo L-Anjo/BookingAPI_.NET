@@ -1,6 +1,7 @@
 using EzBooking.Models;
 using EzBooking.Repository;
 using Microsoft.AspNetCore.Mvc;
+using EzBooking.Dto;
 
 namespace EzBooking.Controllers
 {
@@ -34,10 +35,14 @@ namespace EzBooking.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateUser()
+        public IActionResult CreateUser([FromBody] UserDto userCreate)
         {
+            if (userCreate == null)
+                return BadRequest(ModelState);
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
 
             return Ok("Successfully created");
         }

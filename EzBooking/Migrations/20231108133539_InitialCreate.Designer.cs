@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzBooking.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231108123931_InitialCreate")]
+    [Migration("20231108133539_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,6 +122,10 @@ namespace EzBooking.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_user"), 1L, 1);
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()

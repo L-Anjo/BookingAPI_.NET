@@ -41,6 +41,7 @@ namespace EzBooking.Migrations
                     id_user = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     token = table.Column<string>(type: "nvarchar(max)", nullable: false),

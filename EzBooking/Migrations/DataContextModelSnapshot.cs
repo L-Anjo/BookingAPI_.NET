@@ -121,6 +121,10 @@ namespace EzBooking.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_user"), 1L, 1);
 
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

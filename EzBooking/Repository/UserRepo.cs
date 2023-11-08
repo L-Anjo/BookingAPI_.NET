@@ -1,6 +1,5 @@
 using EzBooking.Data;
 using EzBooking.Models;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace EzBooking.Repository
 {
@@ -14,7 +13,7 @@ namespace EzBooking.Repository
         }
         public ICollection<User> GetUsers()
         {
-            return _context.Users.OrderBy(u => u.id_user).ToList();
+            return _context.Users.OrderBy(h => h.id_user).ToList();
         }
 
         public bool Save()
