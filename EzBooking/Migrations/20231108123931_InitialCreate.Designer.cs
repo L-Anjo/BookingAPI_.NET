@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzBooking.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231107152715_InitialCreate")]
+    [Migration("20231108123931_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,6 +113,38 @@ namespace EzBooking.Migrations
                     b.HasKey("id");
 
                     b.ToTable("StatusHouses");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.User", b =>
+                {
+                    b.Property<int>("id_user")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_user"), 1L, 1);
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id_user");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("EzBooking.Models.House", b =>
