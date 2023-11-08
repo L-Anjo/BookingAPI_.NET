@@ -9,7 +9,6 @@ namespace EzBooking.Models
         public int postalCode { get; set; }
         public string concelho { get; set; }
         public string district { get; set; }
-        public ICollection<House> Houses { get; set; }
     }
 
 

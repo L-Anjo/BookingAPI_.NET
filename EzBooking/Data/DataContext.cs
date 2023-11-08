@@ -17,9 +17,10 @@ namespace EzBooking.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
             modelBuilder.Entity<PostalCode>()
-                .Property(p => p.postalCode)
-                .ValueGeneratedNever();
+                        .Property(p => p.postalCode)
+                        .ValueGeneratedNever();
 
         }
     }

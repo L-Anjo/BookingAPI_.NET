@@ -7,6 +7,5 @@ namespace EzBooking.Models
         [Key]
         public int id { get; set; }
         public string name { get; set; }
-        public ICollection<House> Houses { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzBooking.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231107152715_InitialCreate")]
+    [Migration("20231108162219_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,13 +118,13 @@ namespace EzBooking.Migrations
             modelBuilder.Entity("EzBooking.Models.House", b =>
                 {
                     b.HasOne("EzBooking.Models.StatusHouse", "StatusHouse")
-                        .WithMany("Houses")
+                        .WithMany()
                         .HasForeignKey("StatusHouseid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EzBooking.Models.PostalCode", "PostalCode")
-                        .WithMany("Houses")
+                        .WithMany()
                         .HasForeignKey("postalCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -132,16 +132,6 @@ namespace EzBooking.Migrations
                     b.Navigation("PostalCode");
 
                     b.Navigation("StatusHouse");
-                });
-
-            modelBuilder.Entity("EzBooking.Models.PostalCode", b =>
-                {
-                    b.Navigation("Houses");
-                });
-
-            modelBuilder.Entity("EzBooking.Models.StatusHouse", b =>
-                {
-                    b.Navigation("Houses");
                 });
 #pragma warning restore 612, 618
         }
