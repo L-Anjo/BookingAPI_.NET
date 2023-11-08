@@ -30,13 +30,17 @@ namespace EzBooking.Controllers
             return Ok(users);
         }
 
-        [HttpGet]
+
+        [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult CreateUser()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            return Ok("Successfully created");
         }
+
     }
 }
