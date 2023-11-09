@@ -11,11 +11,14 @@ namespace EzBooking.Controllers
     public class HouseController : Controller
     {
         private readonly HouseRepo _houseRepo;
+        private readonly StatusHouseRepo _statusHouseRepo;
         private readonly PostalCodeRepo _postalCodeRepo;
 
-        public HouseController(HouseRepo houseRepo)
+        public HouseController(HouseRepo houseRepo, StatusHouseRepo statusHouseRepo, PostalCodeRepo postalCodeRepo)
         {
             _houseRepo = houseRepo;
+            _statusHouseRepo = statusHouseRepo;
+            _postalCodeRepo = postalCodeRepo;
         }
 
         //GETS
@@ -79,24 +82,37 @@ namespace EzBooking.Controllers
         {
             if (house == null)
             {
-                return BadRequest("Dados inválidos"); // Retorna 400 Bad Request se os dados forem inválidos
+                return BadRequest("Dados inválidos");
             }
 
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
-
-            //if(_postalCodeRepo.PostalCodeExists(house.PostalCode.postalCode))
-            //house.StatusHouse.id = 1;
-
-                if (_houseRepo.CreateHouse(house))
-            {
-                return CreatedAtAction("CreateHouse", new { id = house.id_house }, house);
-                // Retorna 201 Created e o objeto recém-criado
             }
-            else
+
+            PostalCode existingPostalCode = _postalCodeRepo.GetPostalCodeById(house.PostalCode.postalCode);
+
+            if (existingPostalCode == null)
             {
-                return BadRequest("Falha ao criar a casa"); // Retorna 400 Bad Request se a criação falhar
+                existingPostalCode = new PostalCode
+                {
+                    postalCode = house.PostalCode.postalCode,
+                    concelho = house.PostalCode.concelho,
+                    district = house.PostalCode.district,
+                };
+                _postalCodeRepo.CreatePostalCode(existingPostalCode);
             }
+            
+            //CASA NãO PODE TER MESMO CODIGO POSTAL E PROPERTY
+            house.PostalCode = existingPostalCode;
+
+            StatusHouse status = _statusHouseRepo.GetStatusHouseById(1);
+            house.StatusHouse = status;
+
+            _houseRepo.CreateHouse(house);
+
+            return CreatedAtAction("CreateHouse", new { id = house.id_house }, house);
         }
+        
     }
 }
