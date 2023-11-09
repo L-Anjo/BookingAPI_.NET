@@ -40,10 +40,12 @@ namespace EzBooking.Repository
         //{ 
         //    var review = _context
         //}
+        //var postalcode = _context.PostalCodes.Where(pc => pc.postalCode == house.PostalCode.postalCode).FirstOrDefault();
 
-        
         public bool CreateHouse(House house)
         {
+           
+            
             _context.Add(house);
             return Save();
         }
@@ -53,6 +55,11 @@ namespace EzBooking.Repository
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool HouseExists(int houseid)
+        {
+            return _context.Houses.Any(h => h.id_house == houseid);
         }
     }
 }

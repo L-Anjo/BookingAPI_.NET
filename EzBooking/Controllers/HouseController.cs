@@ -1,6 +1,8 @@
 ﻿using EzBooking.Models;
 using EzBooking.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EzBooking.Controllers
 {
@@ -9,6 +11,7 @@ namespace EzBooking.Controllers
     public class HouseController : Controller
     {
         private readonly HouseRepo _houseRepo;
+        private readonly PostalCodeRepo _postalCodeRepo;
 
         public HouseController(HouseRepo houseRepo)
         {
@@ -70,24 +73,30 @@ namespace EzBooking.Controllers
         }
 
         //CREATES
-        //[HttpPost]
-        //[ProducesResponseType(201)]
-        //public IActionResult CreateHouse([FromBody] House house)
-        //{
-        //    if (house == null)
-        //    {
-        //        return BadRequest("Dados inválidos"); // Retorna 400 Bad Request se os dados forem inválidos
-        //    }
+        [HttpPost]
+        [ProducesResponseType(201)]
+        public IActionResult CreateHouse([FromBody] House house)
+        {
+            if (house == null)
+            {
+                return BadRequest("Dados inválidos"); // Retorna 400 Bad Request se os dados forem inválidos
+            }
 
-        //    if (_houseRepo.CreateHouse(house))
-        //    {
-        //        return CreatedAtAction("CreateHouse", new { id = house.id_house }, house);
-        //        // Retorna 201 Created e o objeto recém-criado
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Falha ao criar a casa"); // Retorna 400 Bad Request se a criação falhar
-        //    }
-        //}
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //if(_postalCodeRepo.PostalCodeExists(house.PostalCode.postalCode))
+            //house.StatusHouse.id = 1;
+
+                if (_houseRepo.CreateHouse(house))
+            {
+                return CreatedAtAction("CreateHouse", new { id = house.id_house }, house);
+                // Retorna 201 Created e o objeto recém-criado
+            }
+            else
+            {
+                return BadRequest("Falha ao criar a casa"); // Retorna 400 Bad Request se a criação falhar
+            }
+        }
     }
 }
