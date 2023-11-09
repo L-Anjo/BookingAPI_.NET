@@ -25,10 +25,46 @@ namespace EzBooking.Repository
         public bool CreateUser(User user)
         {
             _context.Add(user);
-
             return Save();
         }
 
+        public bool CheckEmail(string email)
+        {
+            var existingUser = _context.Users.FirstOrDefault(u => u.email == email);
+            return existingUser != null;
+        }
+
+        public bool UserExists(int userId)
+        {
+            return _context.Users.Any(p => p.id_user == userId);
+        }
+
+        public bool DeleteUser(User user)
+        {
+            _context.Remove(user);
+            return Save();
+        }
+
+        public User GetUser(int userId)
+        {
+            return _context.Users.Where(p => p.id_user == userId).FirstOrDefault();
+        }
+
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                _context.Update(user);
+                return Save();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or add debugging messages
+                Console.WriteLine(ex.Message);
+                return false; // or rethrow the exception for detailed analysis
+            }
+
+        }
 
     }
 }
