@@ -10,7 +10,8 @@ namespace EzBooking.Models
         public DateTime end_date { get; set; }
         public User User { get; set; }
         public House House { get; set; }
-        // public ReservationSates ReservationSates { get; set; }
+        public ReservationStates? ReservationStates { get; set; }
+
         // public Payment Payment { get; set; }
     }
 }

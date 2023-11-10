@@ -9,14 +9,17 @@ namespace EzBooking.Controllers
     public class ReservationController : Controller
     {
         private readonly ReservationRepo _reservationRepo;
+        private readonly ReservationStatesRepo _reservationStatesRepo;
+        private readonly UserRepo _userRepo;
         private readonly HouseRepo _houseRepo;
 
-        public ReservationController(ReservationRepo reservationRepo, HouseRepo houseRepo)
+        public ReservationController(ReservationRepo reservationRepo, HouseRepo houseRepo, ReservationStatesRepo reservationStatesRepo, UserRepo userRepo)
         {
-            _houseRepo = houseRepo;
             _reservationRepo = reservationRepo;
-            
-            // FALTA ReservationStates
+            _reservationStatesRepo = reservationStatesRepo;
+            _houseRepo = houseRepo;
+            _userRepo = userRepo;
+
         }
 
         //GETS
@@ -76,7 +79,22 @@ namespace EzBooking.Controllers
                 return BadRequest(ModelState);
             }
 
-            //FALTA ReservationStatus e User
+            //// Obter User e House com base nos IDs fornecidos
+            //User user = _userRepo.GetUserById(user.id_user);
+            //House house = _houseRepo.GetHouseById(house.id_house);
+
+            //if (user == null || house == null)
+            //{
+            //    return BadRequest("Usuário ou Casa não encontrados");
+            //}
+
+            //reservation.User = user;
+            //reservation.House = house;
+
+            //FALTA House e User
+
+            ReservationStates status = _reservationStatesRepo.GetReservationStatesById(2);
+            reservation.ReservationStates = status;
 
             _reservationRepo.CreateReservation(reservation);
 

@@ -28,6 +28,7 @@ namespace EzBooking.Repository
             return _context.Reservations
                 .Include(r => r.House)
                 .Include(r => r.User)
+                .Include(r => r.ReservationStates)
                 .FirstOrDefault(r => r.id_reservation == id);
 
                  //FALTA ReservationStatus

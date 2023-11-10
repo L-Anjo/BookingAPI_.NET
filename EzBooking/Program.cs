@@ -17,6 +17,9 @@ builder.Services.AddScoped<PostalCodeRepo>();
 builder.Services.AddScoped<StatusHouseRepo>();
 builder.Services.AddScoped<UserRepo>();
 
+builder.Services.AddScoped<ReservationRepo>();
+builder.Services.AddScoped<ReservationStatesRepo>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
