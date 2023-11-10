@@ -24,11 +24,28 @@ public class ExamplesSchemaFilter : ISchemaFilter
                 ["sharedRoom"] = new OpenApiBoolean(Examples.SharedRoomExample),
                 ["postalCode"] = new OpenApiObject
                 {
-                    ["postalcode"] = new OpenApiInteger(4750),
-                    ["concelho"] = new OpenApiString("Barcelos"),
-                    ["district"] = new OpenApiString("Braga")
+                    ["postalcode"] = new OpenApiInteger(Examples.postalCode),
+                    ["concelho"] = new OpenApiString(Examples.concelho),
+                    ["district"] = new OpenApiString(Examples.district)
                 }
                 // Adicione exemplos para outras propriedades aqui...
+            };
+        }
+        if (context.Type == typeof(StatusHouse))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["name"] = new OpenApiString("Disponivel")
+            };
+        }
+
+        if (context.Type == typeof(PostalCode))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["postalcode"] = new OpenApiInteger(Examples.postalCode),
+                ["concelho"] = new OpenApiString(Examples.concelho),
+                ["district"] = new OpenApiString(Examples.district)
             };
         }
     }

@@ -12,7 +12,9 @@
         public const string PropertyAssessmentExample = "A4gffX";
         public const int CodDoorExample = 456;
         public const bool SharedRoomExample = false;
-
+        public const int postalCode = 4750;
+        public const string concelho = "Barcelos";
+        public const string district = "Braga";
         // Adicione exemplos para outras propriedades aqui...
     }
 }

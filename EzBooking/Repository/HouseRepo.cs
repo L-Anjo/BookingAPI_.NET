@@ -44,8 +44,6 @@ namespace EzBooking.Repository
 
         public bool CreateHouse(House house)
         {
-           
-            
             _context.Add(house);
             return Save();
         }
@@ -55,6 +53,11 @@ namespace EzBooking.Repository
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool PostalCodePropertyExists(int postalCode, string propertyAssessment)
+        {
+            return _context.Houses.Any(h => h.PostalCode.postalCode == postalCode && h.propertyAssessment == propertyAssessment);
         }
 
         public bool HouseExists(int houseid)

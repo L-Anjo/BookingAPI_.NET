@@ -78,6 +78,7 @@ namespace EzBooking.Controllers
         //CREATES
         [HttpPost]
         [ProducesResponseType(201)]
+        [ProducesResponseType(409)]
         public IActionResult CreateHouse([FromBody] House house)
         {
             if (house == null)
@@ -90,7 +91,14 @@ namespace EzBooking.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (house.price != null && house.priceyear != null)
+                return BadRequest("A casa so pode ter preço mensal ou anual");
+
+
             PostalCode existingPostalCode = _postalCodeRepo.GetPostalCodeById(house.PostalCode.postalCode);
+
+            if (existingPostalCode!=null && _houseRepo.PostalCodePropertyExists(existingPostalCode.postalCode, house.propertyAssessment))
+                return StatusCode(409, "Já Existe uma casa com esse artigo matricial nesse codigo postal");
 
             if (existingPostalCode == null)
             {
@@ -102,6 +110,7 @@ namespace EzBooking.Controllers
                 };
                 _postalCodeRepo.CreatePostalCode(existingPostalCode);
             }
+            
             
             //CASA NãO PODE TER MESMO CODIGO POSTAL E PROPERTY
             house.PostalCode = existingPostalCode;

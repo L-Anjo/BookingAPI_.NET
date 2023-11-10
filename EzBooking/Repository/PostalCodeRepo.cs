@@ -16,6 +16,7 @@ namespace EzBooking.Repository
         public ICollection<PostalCode> GetPostalCodes()
         {
             return _context.PostalCodes
+                .OrderBy(pc => pc.postalCode)
                 .ToList();
         }
 
@@ -29,6 +30,7 @@ namespace EzBooking.Repository
         {
             return _context.PostalCodes.Any(h => h.postalCode == postalcode);
         }
+
         public bool CreatePostalCode(PostalCode postalcode)
         {
             _context.Add(postalcode);
