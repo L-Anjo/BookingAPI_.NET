@@ -32,11 +32,12 @@ Package Manager (Criar Migrations):
 ```shell
 Add-Migration InitialCreate
 ```
+3. Package Manager (Inserir na BD Migrations):
 ```shell
-Package Manager (Inserir na BD Migrations): Update-Database
+ Update-Database
 ```
 
-3.SQL SERVER:
+4. SQL SERVER:
 Sessão:
  - Server: bkbd.database.windows.net
  - Username: rootadmin

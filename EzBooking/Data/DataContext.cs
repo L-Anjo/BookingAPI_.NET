@@ -9,18 +9,21 @@ namespace EzBooking.Data
         {
             
         }
+
         public DbSet<House> Houses{ get; set; }
         public DbSet<PostalCode> PostalCodes { get; set; }
         public DbSet<StatusHouse> StatusHouses { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-
+        public DbSet<User> Users { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+
             modelBuilder.Entity<PostalCode>()
-                .Property(p => p.postalCode)
-                .ValueGeneratedNever();
+                        .Property(p => p.postalCode)
+                        .ValueGeneratedNever();
 
         }
     }
