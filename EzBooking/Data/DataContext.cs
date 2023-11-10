@@ -13,8 +13,9 @@ namespace EzBooking.Data
         public DbSet<House> Houses{ get; set; }
         public DbSet<PostalCode> PostalCodes { get; set; }
         public DbSet<StatusHouse> StatusHouses { get; set; }
-        public DbSet<Reservation> Reservations { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<ReservationStates> ReservationStates { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
