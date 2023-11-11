@@ -106,6 +106,44 @@ namespace EzBooking.Data
                 status = 1
             };
 
+            var statusReservation1 = new ReservationStates
+            {
+                state = "Cancelada"
+            };
+
+            var statusReservation2 = new ReservationStates
+            {
+                state = "Andamento"
+            };
+
+            var reservation1 = new Reservation
+            {
+                init_date = DateTime.Now,
+                end_date = new DateTime(2023, 11, 14),
+                User = user1,
+                House = house1,
+                ReservationStates = statusReservation1
+            };
+
+            var reservation2 = new Reservation
+            {
+                init_date = DateTime.Now,
+                end_date = new DateTime(2023, 11, 16),
+                User = user2,
+                House = house2,
+                ReservationStates = statusReservation2
+            };
+
+            var reservation3 = new Reservation
+            {
+                init_date = new DateTime(2023, 11, 18),
+                end_date = new DateTime(2023, 11, 23),
+                User = user3,
+                House = house2, 
+                ReservationStates = statusReservation1
+            };
+
+
             var feedback1 = new Feedback
             {
                 classification = 5,
@@ -174,6 +212,9 @@ namespace EzBooking.Data
             dataContext.PaymentStates.AddRange(paymentState1, paymentState2, paymentState3);
             dataContext.Payments.AddRange(payment1, payment2, payment3);
             
+
+            dataContext.ReservationStates.AddRange(statusReservation1, statusReservation2);
+            dataContext.Reservations.AddRange(reservation1, reservation2, reservation3);
 
             dataContext.SaveChanges();
         }

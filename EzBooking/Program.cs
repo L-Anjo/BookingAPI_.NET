@@ -19,6 +19,9 @@ builder.Services.AddScoped<UserRepo>();
 builder.Services.AddMvc();
 builder.Services.AddDirectoryBrowser();
 
+builder.Services.AddScoped<ReservationRepo>();
+builder.Services.AddScoped<ReservationStatesRepo>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
