@@ -64,7 +64,7 @@ namespace EzBooking.Controllers
         //CREATES
         [HttpPost]
         [ProducesResponseType(201)]
-        public IActionResult CreateReservation([FromBody] Reservation reservation, int houseId, int userId)
+        public async Task<IActionResult> CreateReservation([FromBody] Reservation reservation, int houseId, int userId)
         {
             if (reservation == null)
             {
@@ -79,7 +79,7 @@ namespace EzBooking.Controllers
             // Obter instâncias de User e House usando os métodos correspondentes nos repositórios
 
             User user = _userRepo.GetUser(userId);
-            House house = _houseRepo.GetHouseById(houseId);
+            House house = await _houseRepo.GetHouseById(houseId);
 
             if (user == null || house == null)
             {

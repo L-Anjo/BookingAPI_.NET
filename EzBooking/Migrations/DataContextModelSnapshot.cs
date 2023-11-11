@@ -166,6 +166,57 @@ namespace EzBooking.Migrations
                     b.ToTable("PostalCodes");
                 });
 
+            modelBuilder.Entity("EzBooking.Models.Reservation", b =>
+                {
+                    b.Property<int>("id_reservation")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_reservation"), 1L, 1);
+
+                    b.Property<int>("Houseid_house")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReservationStatesid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Userid_user")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("end_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("init_date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id_reservation");
+
+                    b.HasIndex("Houseid_house");
+
+                    b.HasIndex("ReservationStatesid");
+
+                    b.HasIndex("Userid_user");
+
+                    b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.ReservationStates", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("state")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ReservationStates");
+                });
+
             modelBuilder.Entity("EzBooking.Models.StatusHouse", b =>
                 {
                     b.Property<int>("id")
@@ -244,6 +295,31 @@ namespace EzBooking.Migrations
                         .IsRequired();
 
                     b.Navigation("state");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Reservation", b =>
+                {
+                    b.HasOne("EzBooking.Models.House", "House")
+                        .WithMany()
+                        .HasForeignKey("Houseid_house")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EzBooking.Models.ReservationStates", "ReservationStates")
+                        .WithMany()
+                        .HasForeignKey("ReservationStatesid");
+
+                    b.HasOne("EzBooking.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Userid_user")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("House");
+
+                    b.Navigation("ReservationStates");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

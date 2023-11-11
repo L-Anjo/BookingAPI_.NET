@@ -50,6 +50,19 @@ namespace EzBooking.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReservationStates",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    state = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReservationStates", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StatusHouses",
                 columns: table => new
                 {
@@ -139,6 +152,40 @@ namespace EzBooking.Migrations
                         principalColumn: "id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    id_reservation = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    init_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    end_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Userid_user = table.Column<int>(type: "int", nullable: false),
+                    Houseid_house = table.Column<int>(type: "int", nullable: false),
+                    ReservationStatesid = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.id_reservation);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Houses_Houseid_house",
+                        column: x => x.Houseid_house,
+                        principalTable: "Houses",
+                        principalColumn: "id_house",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_ReservationStates_ReservationStatesid",
+                        column: x => x.ReservationStatesid,
+                        principalTable: "ReservationStates",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_Reservations_Users_Userid_user",
+                        column: x => x.Userid_user,
+                        principalTable: "Users",
+                        principalColumn: "id_user",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Houses_postalCode",
                 table: "Houses",
@@ -153,6 +200,21 @@ namespace EzBooking.Migrations
                 name: "IX_Payments_stateid_paymentStates",
                 table: "Payments",
                 column: "stateid_paymentStates");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_Houseid_house",
+                table: "Reservations",
+                column: "Houseid_house");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ReservationStatesid",
+                table: "Reservations",
+                column: "ReservationStatesid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_Userid_user",
+                table: "Reservations",
+                column: "Userid_user");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -161,10 +223,19 @@ namespace EzBooking.Migrations
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "PaymentStates");
+
+            migrationBuilder.DropTable(
                 name: "Houses");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "ReservationStates");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -174,9 +245,6 @@ namespace EzBooking.Migrations
 
             migrationBuilder.DropTable(
                 name: "StatusHouses");
-
-            migrationBuilder.DropTable(
-                name: "PaymentStates");
         }
     }
 }
