@@ -144,7 +144,8 @@ namespace EzBooking.Data
                 creationDate = DateTime.Now,
                 paymentDate = DateTime.Now,
                 paymentMethod = "MbWay",
-                paymentValue = 341
+                paymentValue = 341,
+                state = paymentState1
             };
 
             var payment2 = new Payment
@@ -152,7 +153,8 @@ namespace EzBooking.Data
                 creationDate = DateTime.Now,
                 paymentDate = DateTime.Now,
                 paymentMethod = "Paypal",
-                paymentValue = 187
+                paymentValue = 187,
+                state = paymentState2
             };
 
             var payment3 = new Payment
@@ -160,7 +162,8 @@ namespace EzBooking.Data
                 creationDate = DateTime.Now,
                 paymentDate = DateTime.Now,
                 paymentMethod = "Multibanco",
-                paymentValue = 900
+                paymentValue = 900,
+                state = paymentState3
             };
 
             dataContext.PostalCodes.AddRange(postalCode1, postalCode2);
@@ -168,8 +171,9 @@ namespace EzBooking.Data
             dataContext.Houses.AddRange(house1, house2);
             dataContext.Users.AddRange(user1, user2, user3);
             dataContext.Feedbacks.AddRange(feedback1, feedback2, feedback3);
-            dataContext.Payments.AddRange(payment1, payment2, payment3);
             dataContext.PaymentStates.AddRange(paymentState1, paymentState2, paymentState3);
+            dataContext.Payments.AddRange(payment1, payment2, payment3);
+            
 
             dataContext.SaveChanges();
         }

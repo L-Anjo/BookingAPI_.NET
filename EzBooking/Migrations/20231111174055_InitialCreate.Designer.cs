@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzBooking.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231110144818_InitialCreate")]
+    [Migration("20231111174055_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace EzBooking.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_house"), 1L, 1);
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("StatusHouseid")
                         .HasColumnType("int");
@@ -97,6 +100,37 @@ namespace EzBooking.Migrations
                     b.HasIndex("postalCode");
 
                     b.ToTable("Houses");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Payment", b =>
+                {
+                    b.Property<int>("id_payment")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_payment"), 1L, 1);
+
+                    b.Property<DateTime>("creationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("paymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("paymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("paymentValue")
+                        .HasColumnType("real");
+
+                    b.Property<int>("stateid_paymentStates")
+                        .HasColumnType("int");
+
+                    b.HasKey("id_payment");
+
+                    b.HasIndex("stateid_paymentStates");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("EzBooking.Models.PaymentStates", b =>
@@ -201,6 +235,17 @@ namespace EzBooking.Migrations
                     b.Navigation("PostalCode");
 
                     b.Navigation("StatusHouse");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Payment", b =>
+                {
+                    b.HasOne("EzBooking.Models.PaymentStates", "state")
+                        .WithMany()
+                        .HasForeignKey("stateid_paymentStates")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("state");
                 });
 #pragma warning restore 612, 618
         }
