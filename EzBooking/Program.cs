@@ -14,6 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<HouseRepo>();
 builder.Services.AddScoped<UserRepo>();
+builder.Services.AddScoped<FeedbackRepo>();
+builder.Services.AddScoped<PaymentRepo>();
+builder.Services.AddScoped<PaymentStateRepo>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
