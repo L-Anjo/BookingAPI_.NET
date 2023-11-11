@@ -16,7 +16,6 @@ public class ExamplesSchemaFilter : ISchemaFilter
                 ["doorNumber"] = new OpenApiInteger(Examples.DoorNumberExample),
                 ["floorNumber"] = new OpenApiInteger(Examples.FloorNumberExample),
                 ["price"] = new OpenApiDouble(Examples.PriceExample),
-                ["priceyear"] = new OpenApiDouble(Examples.PriceYearExample),
                 ["guestsNumber"] = new OpenApiInteger(Examples.GuestsNumberExample),
                 ["road"] = new OpenApiString(Examples.RoadExample),
                 ["propertyAssessment"] = new OpenApiString(Examples.PropertyAssessmentExample),

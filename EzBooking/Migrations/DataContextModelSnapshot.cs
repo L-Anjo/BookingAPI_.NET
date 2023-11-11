@@ -30,6 +30,9 @@ namespace EzBooking.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_house"), 1L, 1);
 
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int?>("StatusHouseid")
                         .HasColumnType("int");
 

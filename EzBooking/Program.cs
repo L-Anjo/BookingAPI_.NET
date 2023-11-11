@@ -16,6 +16,8 @@ builder.Services.AddScoped<HouseRepo>();
 builder.Services.AddScoped<PostalCodeRepo>();
 builder.Services.AddScoped<StatusHouseRepo>();
 builder.Services.AddScoped<UserRepo>();
+builder.Services.AddMvc();
+builder.Services.AddDirectoryBrowser();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

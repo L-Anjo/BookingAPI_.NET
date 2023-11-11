@@ -12,21 +12,21 @@ namespace EzBooking.Repository
             _context = context;
 
         }
-        public ICollection<House> GetHouses()
+        public async Task<ICollection<House>> GetHouses()
         {
-            return _context.Houses
+            return await _context.Houses
                 .Include(h => h.PostalCode)
                 .Include(h => h.StatusHouse)
                 .OrderBy(h => h.id_house)
-                .ToList();
+                .ToListAsync();
         }
 
-        public House GetHouseById(int id)
+        public async Task<House> GetHouseById(int id)
         {
-            return _context.Houses
+            return await _context.Houses
                 .Include(h => h.PostalCode)
                 .Include(h => h.StatusHouse)
-                .FirstOrDefault(h => h.id_house == id);
+                .FirstOrDefaultAsync(h => h.id_house == id);
         }
 
         public ICollection<House> GetHousesSusp()
@@ -42,9 +42,9 @@ namespace EzBooking.Repository
         //}
         //var postalcode = _context.PostalCodes.Where(pc => pc.postalCode == house.PostalCode.postalCode).FirstOrDefault();
 
-        public bool CreateHouse(House house)
-        {
-            _context.Add(house);
+        public async Task<bool> CreateHouse(House house)
+        { 
+            await _context.AddAsync(house);
             return Save();
         }
 
@@ -63,6 +63,19 @@ namespace EzBooking.Repository
         public bool HouseExists(int houseid)
         {
             return _context.Houses.Any(h => h.id_house == houseid);
+        }
+
+        public bool UpdateHouse(House house)
+        {
+
+            _context.Update(house);
+            return Save();
+        }
+
+        public bool DeleteHouse(House house)
+        {
+            _context.Remove(house);
+            return Save();
         }
     }
 }

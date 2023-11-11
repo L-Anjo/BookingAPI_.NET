@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -69,7 +70,8 @@ namespace EzBooking.Migrations
                     codDoor = table.Column<int>(type: "int", nullable: true),
                     sharedRoom = table.Column<bool>(type: "bit", nullable: false),
                     postalCode = table.Column<int>(type: "int", nullable: false),
-                    StatusHouseid = table.Column<int>(type: "int", nullable: true)
+                    StatusHouseid = table.Column<int>(type: "int", nullable: true),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

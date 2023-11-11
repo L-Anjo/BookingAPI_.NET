@@ -43,5 +43,7 @@ namespace EzBooking.Models
         public PostalCode PostalCode { get; set; }
 
         public StatusHouse? StatusHouse { get; set; }
+
+        public byte[]? ImageData { get; set; }
     }
 }
