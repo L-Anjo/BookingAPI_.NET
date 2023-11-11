@@ -52,18 +52,8 @@ namespace EzBooking.Repository
 
         public bool UpdateUser(User user)
         {
-            try
-            {
                 _context.Update(user);
                 return Save();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or add debugging messages
-                Console.WriteLine(ex.Message);
-                return false; // or rethrow the exception for detailed analysis
-            }
-
         }
 
     }

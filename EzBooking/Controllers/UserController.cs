@@ -66,6 +66,9 @@ namespace EzBooking.Controllers
                 return StatusCode(422, ModelState);
             }
 
+            userCreate.status = 1;
+            userCreate.token = "ASdeSAEWQASSSD432-2342-12L21";
+
             bool created = _userRepo.CreateUser(userCreate);
 
             if (created)
@@ -126,12 +129,12 @@ namespace EzBooking.Controllers
                 return NotFound();
             }
 
-            var pokemonToDelete = _userRepo.GetUser(userId);
+            var userToDelete = _userRepo.GetUser(userId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_userRepo.DeleteUser(pokemonToDelete))
+            if (!_userRepo.DeleteUser(userToDelete))
             {
                 ModelState.AddModelError("", "Something went wrong deleting owner");
             }

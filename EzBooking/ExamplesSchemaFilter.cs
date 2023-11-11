@@ -27,7 +27,24 @@ public class ExamplesSchemaFilter : ISchemaFilter
                     ["concelho"] = new OpenApiString(Examples.concelho),
                     ["district"] = new OpenApiString(Examples.district)
                 }
-                // Adicione exemplos para outras propriedades aqui...
+            };
+        }
+        else if (context.Type == typeof(User))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["name"] = new OpenApiString(Examples.UserNameExample),
+                ["email"] = new OpenApiString(Examples.UserEmailExample),
+                ["password"] = new OpenApiString(Examples.UserPasswordExample),
+                ["phone"] = new OpenApiString(Examples.UserPhoneExample)
+            };
+        }
+        else if (context.Type == typeof(Feedback))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["classification"] = new OpenApiInteger(Examples.ClassificationExample),
+                ["comment"] = new OpenApiString(Examples.CommentExample)
             };
         }
         if (context.Type == typeof(StatusHouse))

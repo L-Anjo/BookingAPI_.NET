@@ -14,6 +14,9 @@ namespace EzBooking.Data
         public DbSet<PostalCode> PostalCodes { get; set; }
         public DbSet<StatusHouse> StatusHouses { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentStates> PaymentStates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

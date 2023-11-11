@@ -106,10 +106,70 @@ namespace EzBooking.Data
                 status = 1
             };
 
+            var feedback1 = new Feedback
+            {
+                classification = 5,
+                comment = "Muito bom!"
+            };
+
+            var feedback2 = new Feedback
+            {
+                classification = 3,
+                comment = "Razoável!"
+            };
+
+            var feedback3 = new Feedback
+            {
+                classification = 1,
+                comment = "Terrível!"
+            };
+
+            var paymentState1 = new PaymentStates
+            {
+                state = "Pendente"
+            };
+
+            var paymentState2 = new PaymentStates
+            {
+                state = "Concluido"
+            };
+
+            var paymentState3 = new PaymentStates
+            {
+                state = "Cancelado"
+            };
+
+            var payment1 = new Payment
+            {
+                creationDate = DateTime.Now,
+                paymentDate = DateTime.Now,
+                paymentMethod = "MbWay",
+                paymentValue = 341
+            };
+
+            var payment2 = new Payment
+            {
+                creationDate = DateTime.Now,
+                paymentDate = DateTime.Now,
+                paymentMethod = "Paypal",
+                paymentValue = 187
+            };
+
+            var payment3 = new Payment
+            {
+                creationDate = DateTime.Now,
+                paymentDate = DateTime.Now,
+                paymentMethod = "Multibanco",
+                paymentValue = 900
+            };
+
             dataContext.PostalCodes.AddRange(postalCode1, postalCode2);
             dataContext.StatusHouses.AddRange(statusHouse1, statusHouse2);
             dataContext.Houses.AddRange(house1, house2);
             dataContext.Users.AddRange(user1, user2, user3);
+            dataContext.Feedbacks.AddRange(feedback1, feedback2, feedback3);
+            dataContext.Payments.AddRange(payment1, payment2, payment3);
+            dataContext.PaymentStates.AddRange(paymentState1, paymentState2, paymentState3);
 
             dataContext.SaveChanges();
         }
