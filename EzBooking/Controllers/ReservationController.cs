@@ -1,6 +1,8 @@
 using EzBooking.Models;
 using EzBooking.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EzBooking.Controllers
 {
@@ -10,16 +12,15 @@ namespace EzBooking.Controllers
     {
         private readonly ReservationRepo _reservationRepo;
         private readonly ReservationStatesRepo _reservationStatesRepo;
-        private readonly UserRepo _userRepo;
         private readonly HouseRepo _houseRepo;
+        private readonly UserRepo _userRepo;
 
-        public ReservationController(ReservationRepo reservationRepo, HouseRepo houseRepo, ReservationStatesRepo reservationStatesRepo, UserRepo userRepo)
+        public ReservationController(ReservationRepo reservationRepo, ReservationStatesRepo reservationStatesRepo, HouseRepo houseRepo, UserRepo userRepo)
         {
             _reservationRepo = reservationRepo;
             _reservationStatesRepo = reservationStatesRepo;
             _houseRepo = houseRepo;
             _userRepo = userRepo;
-
         }
 
         //GETS
@@ -29,7 +30,7 @@ namespace EzBooking.Controllers
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<Reservation>> GetReservations()
         {
-            var reservations = _reservationRepo.GetReservations();
+            var reservations = _reservationRepo.GetReservations(); // Use um método que já inclui as propriedades associadas
 
             if (reservations == null || reservations.Count == 0)
             {
@@ -43,13 +44,13 @@ namespace EzBooking.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public ActionResult<House> GetReservationById(int id)
+        public ActionResult<Reservation> GetReservationById(int id)
         {
             var reservation = _reservationRepo.GetReservationById(id);
 
             if (reservation == null)
             {
-                return NotFound("Reserva não encontrada."); // Código 404 se a reserva não for encontrada.
+                return NotFound("Reserva não encontrada."); // Código 404 se a casa não for encontrada.
             }
 
             if (id <= 0)
@@ -60,14 +61,10 @@ namespace EzBooking.Controllers
             return Ok(reservation);
         }
 
-
-        // RESERVA SUSP?? (?)
-
-
         //CREATES
         [HttpPost]
         [ProducesResponseType(201)]
-        public IActionResult CreateReservation([FromBody] Reservation reservation)
+        public IActionResult CreateReservation([FromBody] Reservation reservation, int houseId, int userId)
         {
             if (reservation == null)
             {
@@ -79,19 +76,19 @@ namespace EzBooking.Controllers
                 return BadRequest(ModelState);
             }
 
-            //// Obter User e House com base nos IDs fornecidos
-            //User user = _userRepo.GetUserById(user.id_user);
-            //House house = _houseRepo.GetHouseById(house.id_house);
+            // Obter instâncias de User e House usando os métodos correspondentes nos repositórios
 
-            //if (user == null || house == null)
-            //{
-            //    return BadRequest("Usuário ou Casa não encontrados");
-            //}
+            User user = _userRepo.GetUser(userId);
+            House house = _houseRepo.GetHouseById(houseId);
 
-            //reservation.User = user;
-            //reservation.House = house;
+            if (user == null || house == null)
+            {
+                return BadRequest("Usuário ou casa não encontrados");
+            }
 
-            //FALTA House e User
+            // Associar o usuário e a casa à reserva
+            reservation.User = user;
+            reservation.House = house;
 
             ReservationStates status = _reservationStatesRepo.GetReservationStatesById(2);
             reservation.ReservationStates = status;
@@ -99,7 +96,7 @@ namespace EzBooking.Controllers
             _reservationRepo.CreateReservation(reservation);
 
             return CreatedAtAction("CreateReservation", new { id = reservation.id_reservation }, reservation);
-
         }
+
     }
 }

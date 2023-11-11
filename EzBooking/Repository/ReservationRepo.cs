@@ -17,10 +17,9 @@ namespace EzBooking.Repository
                 return _context.Reservations
                 .Include(r => r.House)
                 .Include(r => r.User)
+                .Include(r => r.ReservationStates)
                 .OrderBy(r => r.id_reservation)
                 .ToList();
-
-                //FALTA ReservationStatus
         }
 
         public Reservation GetReservationById(int id)
@@ -31,7 +30,6 @@ namespace EzBooking.Repository
                 .Include(r => r.ReservationStates)
                 .FirstOrDefault(r => r.id_reservation == id);
 
-                 //FALTA ReservationStatus
         }
 
         public bool CreateReservation(Reservation reservation)
@@ -51,5 +49,21 @@ namespace EzBooking.Repository
         {
             return _context.Reservations.Any(r => r.id_reservation == reservationid);
         }
+
+
+        //UPDATE E DELETE MAL
+        public bool UpdateReservation(Reservation reservation)
+        {
+
+            _context.Update(reservation);
+            return Save();
+        }
+
+        public bool DeleteReservation(Reservation reservation)
+        {
+            _context.Remove(reservation);
+            return Save();
+        }
+
     }
 }
