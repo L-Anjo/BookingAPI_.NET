@@ -61,42 +61,6 @@ namespace EzBooking.Controllers
             return Ok(reservation);
         }
 
-        //CREATES
-        [HttpPost]
-        [ProducesResponseType(201)]
-        public IActionResult CreateReservation([FromBody] Reservation reservation, int houseId, int userId)
-        {
-            if (reservation == null)
-            {
-                return BadRequest("Dados inválidos");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Obter instâncias de User e House usando os métodos correspondentes nos repositórios
-
-            User user = _userRepo.GetUser(userId);
-            House house = _houseRepo.GetHouseById(houseId);
-
-            if (user == null || house == null)
-            {
-                return BadRequest("Usuário ou casa não encontrados");
-            }
-
-            // Associar o usuário e a casa à reserva
-            reservation.User = user;
-            reservation.House = house;
-
-            ReservationStates status = _reservationStatesRepo.GetReservationStatesById(2);
-            reservation.ReservationStates = status;
-
-            _reservationRepo.CreateReservation(reservation);
-
-            return CreatedAtAction("CreateReservation", new { id = reservation.id_reservation }, reservation);
-        }
 
     }
 }

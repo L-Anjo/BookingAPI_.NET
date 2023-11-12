@@ -66,6 +66,9 @@ namespace EzBooking.Controllers
                 return StatusCode(422, ModelState);
             }
 
+            _userRepo.CreatePasswordHash(userCreate.password, out byte[] passwordHash, out byte[] passwordSalt);
+            userCreate.passwordHash = passwordHash;
+            userCreate.passwordSalt = passwordSalt;
             userCreate.status = 1;
             userCreate.token = "ASdeSAEWQASSSD432-2342-12L21";
 

@@ -1,4 +1,5 @@
-﻿using EzBooking.Models;
+﻿using EzBooking.Dtto;
+using EzBooking.Models;
 using EzBooking.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,30 +12,37 @@ namespace EzBooking.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        public static User user = new User();
-        //CREATES
-        [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(User user)
+        private readonly UserRepo _userRepo;
+        
+
+        public AuthController(UserRepo userRepo) 
         {
-            CreatePasswordHash(user.password, out byte[] passwordHash);
-
-
-            user.name = user.name;
-            user.email = user.email;
-            user.phone = user.phone;
-            user.status = 1;
-            user.passwordHash = passwordHash;
-
-            return Ok(user);
+            _userRepo = userRepo;
+            
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash)
+
+        [HttpPost("login")]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<string>> Login([FromBody] LoginDto login)
         {
-            using (var hmac = new HMACSHA512())
+            var getuser = _userRepo.GetUserByEmail(login.email);
+
+            if(getuser==null || !_userRepo.VerifyPasswordHash(login.password, getuser.passwordHash, getuser.passwordSalt))
             {
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return BadRequest("Dados inválidos");
             }
+            else
+            {
+                string token = _userRepo.CreateToken(getuser);
+                return Ok(token);
+
+
+            }
+            
         }
+
+
     }
 
 }
