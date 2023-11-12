@@ -70,7 +70,6 @@ namespace EzBooking.Controllers
             userCreate.passwordHash = passwordHash;
             userCreate.passwordSalt = passwordSalt;
             userCreate.status = 1;
-            userCreate.token = "ASdeSAEWQASSSD432-2342-12L21";
 
             bool created = _userRepo.CreateUser(userCreate);
 

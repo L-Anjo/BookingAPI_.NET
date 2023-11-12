@@ -35,9 +35,9 @@ namespace EzBooking.Controllers
             else
             {
                 string token = _userRepo.CreateToken(getuser);
+                getuser.token = token;
+                _userRepo.UpdateUser(getuser);
                 return Ok(token);
-
-
             }
             
         }
