@@ -16,6 +16,9 @@ builder.Services.AddScoped<HouseRepo>();
 builder.Services.AddScoped<PostalCodeRepo>();
 builder.Services.AddScoped<StatusHouseRepo>();
 builder.Services.AddScoped<UserRepo>();
+builder.Services.AddScoped<PaymentRepo>();
+builder.Services.AddScoped<PaymentStateRepo>();
+builder.Services.AddScoped<UserRepo>();
 builder.Services.AddMvc();
 builder.Services.AddDirectoryBrowser();
 
