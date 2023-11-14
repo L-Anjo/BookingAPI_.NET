@@ -31,6 +31,21 @@ namespace EzBooking.Controllers
             return Ok(paymentStates);
         }
 
+        [HttpGet("{paymentStateId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public ActionResult<Payment> GetPaymentState(int paymentStateId)
+        {
+            var paymentState = _paymentStateRepo.GetPaymentState(paymentStateId);
+
+            if (paymentState == null)
+            {
+                return NotFound("Payment not found"); //404
+            }
+
+            return Ok(paymentState);
+        }
+
 
         [HttpPost]
         [ProducesResponseType(204)]
@@ -43,6 +58,12 @@ namespace EzBooking.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var checkState = _paymentStateRepo.CheckState(paymentCreate.state);
+            if (checkState == true)
+            {
+                ModelState.AddModelError("", "State already exists");
+                return StatusCode(422, ModelState);
+            }
 
             bool created = _paymentStateRepo.CreatePaymentStates(paymentCreate);
 
@@ -57,13 +78,50 @@ namespace EzBooking.Controllers
             }
         }
 
+        [HttpPut("{paymentStateId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdatePaymentState(int paymentStateId,
+           [FromBody] PaymentStates updatedPaymentState)
+        {
+
+            var existingPaymentState = _paymentStateRepo.GetPaymentState(paymentStateId);
+
+            if (existingPaymentState == null)
+            {
+                return NotFound();
+            }
+
+            var checkState = _paymentStateRepo.CheckState(updatedPaymentState.state);
+            if (checkState == true)
+            {
+                ModelState.AddModelError("", "State already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            existingPaymentState.state = updatedPaymentState.state;
+
+            bool updated = _paymentStateRepo.UpdatePaymentState(existingPaymentState);
+
+            if (updated)
+            {
+                return Ok("Successfully updated");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+                return StatusCode(500, ModelState);
+            }
+        }
+
         [HttpDelete("{paymentStatesId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public IActionResult DeletePaymentStates(int paymentStatesId)
         {
-            var paymentStatesToDelete = _paymentStateRepo.GetPaymentStates(paymentStatesId);
+            var paymentStatesToDelete = _paymentStateRepo.GetPaymentState(paymentStatesId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

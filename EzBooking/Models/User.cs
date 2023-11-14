@@ -16,7 +16,5 @@ namespace EzBooking.Models
         public string phone { get; set; }
         public string? token { get; set; }
         public int? status { get; set; }
-        public byte[]? passwordHash { get; set; }
-        public byte[]? passwordSalt { get; set; }
     }
 }

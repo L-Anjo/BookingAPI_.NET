@@ -28,9 +28,15 @@ namespace EzBooking.Repository
             return Save();
         }
 
-        public PaymentStates GetPaymentStates(int paymentStates)
+        public PaymentStates GetPaymentState(int paymentStates)
         {
             return _context.PaymentStates.Where(p => p.id_paymentStates == paymentStates).FirstOrDefault();
+        }
+
+        public bool UpdatePaymentState(PaymentStates paymentStates)
+        {
+            _context.Update(paymentStates);
+            return Save();
         }
 
 
@@ -38,6 +44,12 @@ namespace EzBooking.Repository
         {
             _context.Remove(paymentStates);
             return Save();
+        }
+
+        public bool CheckState(string state)
+        {
+            var existingState = _context.PaymentStates.FirstOrDefault(u => u.state == state);
+            return existingState != null;
         }
 
     }

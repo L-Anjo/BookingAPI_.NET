@@ -10,10 +10,12 @@ namespace EzBooking.Controllers
     public class FeedbackController : Controller
     {
         private readonly FeedbackRepo _feedbackRepo;
+        private readonly ReservationRepo _reservationRepo;
 
-        public FeedbackController(FeedbackRepo feedbackRepo)
+        public FeedbackController(FeedbackRepo feedbackRepo, Reservation reservationRepo)
         {
             _feedbackRepo = feedbackRepo;
+            _reservationRepo = reservationRepo;
         }
 
         [HttpGet]
@@ -35,6 +37,7 @@ namespace EzBooking.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public IActionResult CreateFeedback([FromBody] Feedback feedbackCreate)
         {
             if (feedbackCreate == null)
@@ -43,6 +46,12 @@ namespace EzBooking.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            Reservation getReservation = _reservationRepo.GetReservationById(feedbackCreate.Reservation.id_reservation);
+
+            if (getReservation == null)
+            {
+                return NotFound("A reserva não existe.");
+            }
 
             bool created = _feedbackRepo.CreateFeedback(feedbackCreate);
 

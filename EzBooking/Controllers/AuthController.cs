@@ -28,7 +28,7 @@ namespace EzBooking.Controllers
         {
             var getuser = _userRepo.GetUserByEmail(login.email);
 
-            if(getuser==null || !_userRepo.VerifyPasswordHash(login.password, getuser.passwordHash, getuser.passwordSalt))
+            if(getuser==null || !BCrypt.Net.BCrypt.Verify(login.password, getuser.password))
             {
                 return BadRequest("Dados inválidos");
             }

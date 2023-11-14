@@ -1,7 +1,10 @@
 using EzBooking.Models;
 using EzBooking.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
+using System.Text;
 
 namespace EzBooking.Controllers
 {
@@ -17,6 +20,7 @@ namespace EzBooking.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<User>> GetUsers()
@@ -66,9 +70,10 @@ namespace EzBooking.Controllers
                 return StatusCode(422, ModelState);
             }
 
-            _userRepo.CreatePasswordHash(userCreate.password, out byte[] passwordHash, out byte[] passwordSalt);
-            userCreate.passwordHash = passwordHash;
-            userCreate.passwordSalt = passwordSalt;
+            // _userRepo.CreatePasswordHash(userCreate.password, out byte[] passwordHash, out byte[] passwordSalt);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreate.password);
+
+            userCreate.password = hashedPassword;
             userCreate.status = 1;
 
             bool created = _userRepo.CreateUser(userCreate);
