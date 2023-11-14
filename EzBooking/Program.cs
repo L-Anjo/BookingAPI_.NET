@@ -58,7 +58,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

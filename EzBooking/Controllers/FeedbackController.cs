@@ -12,7 +12,7 @@ namespace EzBooking.Controllers
         private readonly FeedbackRepo _feedbackRepo;
         private readonly ReservationRepo _reservationRepo;
 
-        public FeedbackController(FeedbackRepo feedbackRepo, Reservation reservationRepo)
+        public FeedbackController(FeedbackRepo feedbackRepo, ReservationRepo reservationRepo)
         {
             _feedbackRepo = feedbackRepo;
             _reservationRepo = reservationRepo;
