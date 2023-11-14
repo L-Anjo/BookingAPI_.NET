@@ -33,6 +33,18 @@ namespace EzBooking.Repository
             return _context.Payments.Where(p => p.id_payment == paymentId).FirstOrDefault();
         }
 
+        public bool UpdatePayment(Payment payment)
+        {
+            _context.Update(payment);
+            return Save();
+        }
+
+        public bool DeletePayment(Payment payment)
+        {
+            _context.Remove(payment);
+            return Save();
+        }
+
 
     }
 }

@@ -15,6 +15,6 @@ namespace EzBooking.Models
         [Required(ErrorMessage = "O campo Phone é obrigatório.")]
         public string phone { get; set; }
         public string? token { get; set; }
-        public int? status { get; set; }
+        public int status { get; set; }
     }
 }

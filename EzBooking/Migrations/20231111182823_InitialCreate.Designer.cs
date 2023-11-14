@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzBooking.Migrations
 {
     [DbContext(typeof(DataContext))]
+<<<<<<<< HEAD:EzBooking/Migrations/20231111182823_InitialCreate.Designer.cs
     [Migration("20231111182823_InitialCreate")]
+========
+    [Migration("20231114152920_InitialCreate")]
+>>>>>>>> UserAuthentication:EzBooking/Migrations/20231114152920_InitialCreate.Designer.cs
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -255,6 +259,12 @@ namespace EzBooking.Migrations
                     b.Property<string>("password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("passwordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("passwordSalt")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("phone")
                         .IsRequired()

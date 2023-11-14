@@ -86,7 +86,13 @@ namespace EzBooking.Migrations
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+<<<<<<<< HEAD:EzBooking/Migrations/20231111182823_InitialCreate.cs
                     status = table.Column<int>(type: "int", nullable: true)
+========
+                    status = table.Column<int>(type: "int", nullable: true),
+                    passwordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    passwordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+>>>>>>>> UserAuthentication:EzBooking/Migrations/20231114152920_InitialCreate.cs
                 },
                 constraints: table =>
                 {

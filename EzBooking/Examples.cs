@@ -28,6 +28,19 @@
         public const int postalCode = 4750;
         public const string concelho = "Barcelos";
         public const string district = "Braga";
+
+        //Exemplos para o pagamento
+
+        public static DateTime CreationDateExample => DateTime.Now;
+        public static DateTime PaymentDateExample => DateTime.Now;
+        public const string PaymentMethodExample = "Paypal";
+        public const int PaymentValueExample = 354;
+        public const int PaymentStateExample = 1;
+
+        //Exemplos para o login
+
+        public const string EmailExample = "robertorodrigues@gmail.com";
+        public const string PasswordExample = "robertorodrigues123";
         // Adicione exemplos para outras propriedades aqui...
     }
 }

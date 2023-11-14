@@ -1,7 +1,10 @@
 using EzBooking.Models;
 using EzBooking.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
+using System.Text;
 
 namespace EzBooking.Controllers
 {
@@ -17,6 +20,7 @@ namespace EzBooking.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<User>> GetUsers()
@@ -46,8 +50,6 @@ namespace EzBooking.Controllers
             return Ok(user);
         }
 
-
-
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -66,8 +68,11 @@ namespace EzBooking.Controllers
                 return StatusCode(422, ModelState);
             }
 
+            // _userRepo.CreatePasswordHash(userCreate.password, out byte[] passwordHash, out byte[] passwordSalt);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreate.password);
+
+            userCreate.password = hashedPassword;
             userCreate.status = 1;
-            userCreate.token = "ASdeSAEWQASSSD432-2342-12L21";
 
             bool created = _userRepo.CreateUser(userCreate);
 
@@ -142,5 +147,35 @@ namespace EzBooking.Controllers
             return NoContent();
         }
 
+
+        [HttpPut("{userId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult SoftDeleteUser(int userId)
+        {
+
+            var existingUser = _userRepo.GetUser(userId);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            existingUser.status = 0;
+
+
+            bool updated = _userRepo.UpdateUser(existingUser);
+
+            if (updated)
+            {
+                return Ok("Utilizador desativado com sucesso!");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+                return StatusCode(500, ModelState);
+            }
+        }
     }
 }
