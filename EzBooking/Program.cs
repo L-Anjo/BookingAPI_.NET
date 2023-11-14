@@ -24,6 +24,7 @@ builder.Services.AddScoped<PaymentStateRepo>();
 builder.Services.AddScoped<UserRepo>();
 builder.Services.AddScoped<ReservationRepo>();
 builder.Services.AddScoped<ReservationStatesRepo>();
+builder.Services.AddScoped<FeedbackRepo>();
 
 builder.Services.AddMvc();
 builder.Services.AddDirectoryBrowser();
