@@ -50,8 +50,6 @@ namespace EzBooking.Controllers
             return Ok(user);
         }
 
-
-
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -149,5 +147,35 @@ namespace EzBooking.Controllers
             return NoContent();
         }
 
+
+        [HttpPut("{userId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult SoftDeleteUser(int userId)
+        {
+
+            var existingUser = _userRepo.GetUser(userId);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            existingUser.status = 0;
+
+
+            bool updated = _userRepo.UpdateUser(existingUser);
+
+            if (updated)
+            {
+                return Ok("Utilizador desativado com sucesso!");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+                return StatusCode(500, ModelState);
+            }
+        }
     }
 }
