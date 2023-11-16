@@ -1,12 +1,12 @@
 using EzBooking.Data;
 using EzBooking.Repository;
 using EzBooking.SwaggerExamples;
-using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+//using Microsoft.AspNetCore.Authentication.JwtBearer;
+//using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,17 +32,17 @@ builder.Services.AddDirectoryBrowser();
 
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateIssuerSigningKey = true,
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+//            ValidateIssuer = false,
+//            ValidateAudience = false
+//        };
+//    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -53,10 +53,10 @@ builder.Services.AddSwaggerGen(c =>
     c.SchemaFilter<ExamplesSchemaFilter>();
     // Adicione esta linha para incluir os exemplos
 });
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
-});
+//builder.Services.AddDbContext<DataContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+//});
 
 
 builder.Services.AddSwaggerGen(c =>
