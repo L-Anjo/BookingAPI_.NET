@@ -46,7 +46,7 @@ Sessão:
 
 5. Run tests
    ```shell
-   docker exec -it api-app npm test
+
    ```
 
 # API - Backend
