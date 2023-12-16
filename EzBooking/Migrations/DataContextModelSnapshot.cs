@@ -30,6 +30,9 @@ namespace EzBooking.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_feedback"), 1L, 1);
 
+                    b.Property<int?>("Reservationid_reservation")
+                        .HasColumnType("int");
+
                     b.Property<int>("classification")
                         .HasColumnType("int");
 
@@ -37,6 +40,8 @@ namespace EzBooking.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id_feedback");
+
+                    b.HasIndex("Reservationid_reservation");
 
                     b.ToTable("Feedbacks");
                 });
@@ -49,10 +54,10 @@ namespace EzBooking.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_house"), 1L, 1);
 
-                    b.Property<byte[]>("ImageData")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<int?>("StatusHouseid")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Userid_user")
                         .HasColumnType("int");
 
                     b.Property<int?>("codDoor")
@@ -88,6 +93,9 @@ namespace EzBooking.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("rooms")
+                        .HasColumnType("int");
+
                     b.Property<bool>("sharedRoom")
                         .HasColumnType("bit");
 
@@ -95,9 +103,33 @@ namespace EzBooking.Migrations
 
                     b.HasIndex("StatusHouseid");
 
+                    b.HasIndex("Userid_user");
+
                     b.HasIndex("postalCode");
 
                     b.ToTable("Houses");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Images", b =>
+                {
+                    b.Property<int>("id_image")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_image"), 1L, 1);
+
+                    b.Property<int>("Houseid_house")
+                        .HasColumnType("int");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id_image");
+
+                    b.HasIndex("Houseid_house");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("EzBooking.Models.Payment", b =>
@@ -108,14 +140,16 @@ namespace EzBooking.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_payment"), 1L, 1);
 
+                    b.Property<int>("Reservationid_reservation")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("creationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("paymentDate")
+                    b.Property<DateTime?>("paymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("paymentMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("paymentValue")
@@ -125,6 +159,8 @@ namespace EzBooking.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("id_payment");
+
+                    b.HasIndex("Reservationid_reservation");
 
                     b.HasIndex("stateid_paymentStates");
 
@@ -174,17 +210,20 @@ namespace EzBooking.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_reservation"), 1L, 1);
 
-                    b.Property<int>("Houseid_house")
+                    b.Property<int?>("Houseid_house")
                         .HasColumnType("int");
 
                     b.Property<int?>("ReservationStatesid")
                         .HasColumnType("int");
 
-                    b.Property<int>("Userid_user")
+                    b.Property<int?>("Userid_user")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("end_date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("guestsNumber")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("init_date")
                         .HasColumnType("datetime2");
@@ -217,6 +256,26 @@ namespace EzBooking.Migrations
                     b.ToTable("ReservationStates");
                 });
 
+            modelBuilder.Entity("EzBooking.Models.RevokedTokens", b =>
+                {
+                    b.Property<int>("id_revokedToken")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_revokedToken"), 1L, 1);
+
+                    b.Property<DateTime>("revocationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id_revokedToken");
+
+                    b.ToTable("RevokedTokens");
+                });
+
             modelBuilder.Entity("EzBooking.Models.StatusHouse", b =>
                 {
                     b.Property<int>("id")
@@ -246,6 +305,9 @@ namespace EzBooking.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -254,25 +316,49 @@ namespace EzBooking.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("passwordHash")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("passwordSalt")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("status")
+                    b.Property<int>("phone")
                         .HasColumnType("int");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
 
                     b.Property<string>("token")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("userTypeid_userType")
+                        .HasColumnType("int");
+
                     b.HasKey("id_user");
 
+                    b.HasIndex("userTypeid_userType");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.UserTypes", b =>
+                {
+                    b.Property<int>("id_userType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_userType"), 1L, 1);
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id_userType");
+
+                    b.ToTable("UserTypes");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Feedback", b =>
+                {
+                    b.HasOne("EzBooking.Models.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("Reservationid_reservation");
+
+                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("EzBooking.Models.House", b =>
@@ -280,6 +366,14 @@ namespace EzBooking.Migrations
                     b.HasOne("EzBooking.Models.StatusHouse", "StatusHouse")
                         .WithMany()
                         .HasForeignKey("StatusHouseid");
+
+<<<<<<< HEAD
+                    b.HasOne("EzBooking.Models.User", null)
+=======
+                    b.HasOne("EzBooking.Models.User", "User")
+>>>>>>> 7c5b44991fd4f4cc0aa53488f63f4e2698806586
+                        .WithMany("Houses")
+                        .HasForeignKey("Userid_user");
 
                     b.HasOne("EzBooking.Models.PostalCode", "PostalCode")
                         .WithMany()
@@ -290,15 +384,47 @@ namespace EzBooking.Migrations
                     b.Navigation("PostalCode");
 
                     b.Navigation("StatusHouse");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Images", b =>
+                {
+                    b.HasOne("EzBooking.Models.House", "House")
+                        .WithMany("Images")
+                        .HasForeignKey("Houseid_house")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("House");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.Images", b =>
+                {
+                    b.HasOne("EzBooking.Models.House", "House")
+                        .WithMany("Images")
+                        .HasForeignKey("Houseid_house")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("House");
                 });
 
             modelBuilder.Entity("EzBooking.Models.Payment", b =>
                 {
+                    b.HasOne("EzBooking.Models.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("Reservationid_reservation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EzBooking.Models.PaymentStates", "state")
                         .WithMany()
                         .HasForeignKey("stateid_paymentStates")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Reservation");
 
                     b.Navigation("state");
                 });
@@ -306,26 +432,45 @@ namespace EzBooking.Migrations
             modelBuilder.Entity("EzBooking.Models.Reservation", b =>
                 {
                     b.HasOne("EzBooking.Models.House", "House")
-                        .WithMany()
-                        .HasForeignKey("Houseid_house")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Reservations")
+                        .HasForeignKey("Houseid_house");
 
                     b.HasOne("EzBooking.Models.ReservationStates", "ReservationStates")
                         .WithMany()
                         .HasForeignKey("ReservationStatesid");
 
                     b.HasOne("EzBooking.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Userid_user")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Reservations")
+                        .HasForeignKey("Userid_user");
 
                     b.Navigation("House");
 
                     b.Navigation("ReservationStates");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.User", b =>
+                {
+                    b.HasOne("EzBooking.Models.UserTypes", "userType")
+                        .WithMany()
+                        .HasForeignKey("userTypeid_userType");
+
+                    b.Navigation("userType");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.House", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("EzBooking.Models.User", b =>
+                {
+                    b.Navigation("Houses");
+
+                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,6 +18,7 @@ public class ExamplesSchemaFilter : ISchemaFilter
                 ["floorNumber"] = new OpenApiInteger(Examples.FloorNumberExample),
                 ["price"] = new OpenApiDouble(Examples.PriceExample),
                 ["guestsNumber"] = new OpenApiInteger(Examples.GuestsNumberExample),
+                ["rooms"] = new OpenApiInteger(Examples.GuestsNumberExample),
                 ["road"] = new OpenApiString(Examples.RoadExample),
                 ["propertyAssessment"] = new OpenApiString(Examples.PropertyAssessmentExample),
                 ["codDoor"] = new OpenApiInteger(Examples.CodDoorExample),
@@ -38,6 +39,16 @@ public class ExamplesSchemaFilter : ISchemaFilter
                 ["email"] = new OpenApiString(Examples.UserEmailExample),
                 ["password"] = new OpenApiString(Examples.UserPasswordExample),
                 ["phone"] = new OpenApiString(Examples.UserPhoneExample)
+            };
+
+        }
+        else if (context.Type == typeof(Reservation))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["init_date"] = new OpenApiDate(Examples.InitDateExample),
+                ["end_date"] = new OpenApiDate(Examples.EndDateExample),
+                ["guestsNumber"] = new OpenApiInteger(Examples.GuestNumResExample),
             };
         }
         else if (context.Type == typeof(Feedback))
@@ -73,7 +84,12 @@ public class ExamplesSchemaFilter : ISchemaFilter
                 ["password"] = new OpenApiString(Examples.PasswordExample)
             };
         }
-        /*
+        //else if (context.Type == typeof(Images))
+        //{
+
+            
+        //}
+        
         else if (context.Type == typeof(Payment))
         {
             schema.Example = new OpenApiObject
@@ -81,9 +97,31 @@ public class ExamplesSchemaFilter : ISchemaFilter
                 ["creationDate"] = new OpenApiDate(Examples.CreationDateExample),
                 ["paymentDate"] = new OpenApiDate(Examples.PaymentDateExample),
                 ["paymentMethod"] = new OpenApiString(Examples.PaymentMethodExample),
-                ["paymentValue"] = new OpenApiInteger(Examples.PaymentValueExample),
-                ["state"] = new OpenApiInteger(Examples.PaymentStateExample)
+                ["paymentValue"] = new OpenApiInteger(Examples.PaymentValueExample)
             };
-        }*/
+        }
+
+        else if (context.Type == typeof(ReservationStates))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["state"] = new OpenApiString("Disponivel")
+            };
+        }
+        if (context.Type == typeof(UserTypes))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["type"] = new OpenApiString(Examples.TypeExample)
+            };
+        }
+        if (context.Type == typeof(PaymentStates))
+        {
+            schema.Example = new OpenApiObject
+            {
+                ["state"] = new OpenApiString("Pendente")
+            };
+        }
+
     }
 }

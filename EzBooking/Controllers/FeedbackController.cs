@@ -18,6 +18,10 @@ namespace EzBooking.Controllers
             _reservationRepo = reservationRepo;
         }
 
+        /// <summary>
+        /// Obtém todos os feedbacks.
+        /// </summary>
+        /// <returns>Uma lista de feedbacks.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -33,12 +37,16 @@ namespace EzBooking.Controllers
             return Ok(feedbacks);
         }
 
-
+        /// <summary>
+        /// Cria um feedback
+        /// </summary>
+        /// <param name="feedbackCreate"></param>
+        /// <returns>Cria um feedback</returns>
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult CreateFeedback([FromBody] Feedback feedbackCreate)
+        public async Task<IActionResult> CreateFeedback([FromBody] Feedback feedbackCreate, int reservationId)
         {
             if (feedbackCreate == null)
                 return BadRequest(ModelState);
@@ -46,12 +54,14 @@ namespace EzBooking.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            Reservation getReservation = _reservationRepo.GetReservationById(feedbackCreate.Reservation.id_reservation);
+            Reservation getReservation = await _reservationRepo.GetReservationById(reservationId);
 
             if (getReservation == null)
             {
                 return NotFound("A reserva não existe.");
             }
+
+            feedbackCreate.Reservation = getReservation;
 
             bool created = _feedbackRepo.CreateFeedback(feedbackCreate);
 
@@ -66,6 +76,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtém um feedback
+        /// </summary>
+        /// <param name="feedbackId" example ="1">O ID do feedback</param>
+        /// <returns>Um feedbaack</returns>
         [HttpGet("{feedbackId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -81,6 +96,11 @@ namespace EzBooking.Controllers
             return Ok(feedback);
         }
 
+        /// <summary>
+        /// Atualiza um feedback
+        /// </summary>
+        /// <param name="feedbackId" example="1">ID do feedback</param>
+        /// <returns>Atualiza um feedback</returns>
         [HttpPut("{feedbackId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -112,6 +132,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Apaga um feedback
+        /// </summary>
+        /// <param name="feedbackId" example="1">ID do feedback</param>
+        /// <returns>Exclui um feedback</returns>
         [HttpDelete("{feedbackId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

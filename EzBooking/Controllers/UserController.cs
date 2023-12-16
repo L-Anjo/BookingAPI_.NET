@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
 using System.Text;
+using EzBooking.Dtto;
+using System.Security.Claims;
 
 namespace EzBooking.Controllers
 {
@@ -13,19 +15,27 @@ namespace EzBooking.Controllers
     public class UserController : Controller
     {
         private readonly UserRepo _userRepo;
+        private readonly UserTypesRepo _userTypesRepo;
 
-        public UserController(UserRepo userRepo)
+        public UserController(UserRepo userRepo, UserTypesRepo userTypeRepo)
         {
+
             _userRepo = userRepo;
+            _userTypesRepo = userTypeRepo;
         }
 
+        /// <summary>
+        /// Obtém todos os utilizadores.
+        /// </summary>
+        /// <returns>Uma lista de Utilizadores.</returns>
         [HttpGet]
-        [Authorize]
+        [AuthAuthorize]
+        [AdminAuthorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public ActionResult<IEnumerable<User>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var users = _userRepo.GetUsers();
+            var users = await _userRepo.GetUsers();
 
             if (users == null || users.Count == 0)
             {
@@ -35,8 +45,15 @@ namespace EzBooking.Controllers
             return Ok(users);
         }
 
+
+        /// <summary>
+        /// Obtém um utilizador
+        /// </summary>
+        /// <param name="userId" example ="1">O ID do Utilizador</param>
+        /// <returns>Um utilizador</returns>
+        //[AuthAuthorize]
         [HttpGet("{userId}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(200)] 
         [ProducesResponseType(404)]
         public ActionResult<User> GetUser(int userId)
         {
@@ -50,6 +67,69 @@ namespace EzBooking.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Obtém Casas do Utilizador
+        /// </summary>
+        /// <param name="id" example ="1">O ID do Utilizador</param>
+        /// <returns>Um Utilizador.</returns>
+        [HttpGet("Houses/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<User>> GetHousesFromUser(int id)
+        {
+            var user = await _userRepo.GetHousesFromUser(id);
+
+            if (user == null)
+            {
+                return NotFound("Utilizador não encontrado."); // Código 404
+            }
+
+            if (user.Houses == null || !user.Houses.Any())
+            {
+                return NotFound("Utilizador não tem casas."); // Código 404
+            }
+
+            if (id <= 0)
+            {
+                return BadRequest("ID inválido."); // Código 400 se o ID for inválido.
+            }
+
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// Obtém Reservas do Utilizador
+        /// </summary>
+        /// <param name="id" example ="1">O ID do Utilizador</param>
+        /// <returns>Um Utilizador.</returns>
+        [HttpGet("Reservations/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<User>> GetReservationsFromUser(int id)
+        {
+            var user = await _userRepo.GetReservationsFromUser(id);
+
+            if (user == null)
+            {
+                return NotFound("Utilizador não tem reservas."); // Código 404
+            }
+
+
+            if (id <= 0)
+            {
+                return BadRequest("ID inválido."); // Código 400 se o ID for inválido.
+            }
+
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// Cria um utilizador
+        /// </summary>
+        /// <param name="userCreate"></param>
+        /// <returns>Cria um utilizador</returns>
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -68,11 +148,13 @@ namespace EzBooking.Controllers
                 return StatusCode(422, ModelState);
             }
 
-            // _userRepo.CreatePasswordHash(userCreate.password, out byte[] passwordHash, out byte[] passwordSalt);
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userCreate.password);
 
             userCreate.password = hashedPassword;
-            userCreate.status = 1;
+            userCreate.status = true;
+
+            UserTypes userType = _userTypesRepo.GetUserType(1);
+            userCreate.userType = userType;
 
             bool created = _userRepo.CreateUser(userCreate);
 
@@ -87,6 +169,57 @@ namespace EzBooking.Controllers
             }  
         }
 
+        /// <summary>
+        /// Altera avatar do utilizador
+        /// </summary>
+        [HttpPut("avatar")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateAvatar([FromForm] AvatarDto viewModel)
+        {
+            if (viewModel.ImageFile != null && viewModel.ImageFile.Length > 0)
+            {
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                
+                var uniqueFileName = $"{userId}_{Path.GetFileName(viewModel.ImageFile.FileName)}.jpg";
+                string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Users", uniqueFileName);
+
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    viewModel.ImageFile.CopyToAsync(fileStream);
+                }
+
+
+                var userLogged = _userRepo.GetUser(int.Parse(userId));
+                userLogged.image = uniqueFileName;
+
+                // Atualizar o usuário apenas se ele não for nulo
+                bool updated = _userRepo.UpdateUser(userLogged);
+
+                if (updated)
+                {
+                    return Ok("Successfully updated");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong updating owner");
+                    return StatusCode(500, ModelState);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Image file is missing");
+                return BadRequest(ModelState);
+            }
+        }
+
+        /// <summary>
+        /// Atualiza um utilizador
+        /// </summary>
+        /// <param name="userId" example="1">ID do utilizador</param>
+        /// <returns>Atualiza um utilizador</returns>
         [HttpPut("{userId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -123,6 +256,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Apaga um utilizador
+        /// </summary>
+        /// <param name="userId" example="1">ID do utilizador</param>
+        /// <returns>Exclui um utilizador</returns>
         [HttpDelete("{userId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -147,8 +285,12 @@ namespace EzBooking.Controllers
             return NoContent();
         }
 
-
-        [HttpPut("{userId}")]
+        /// <summary>
+        /// Altera estado do utilizador
+        /// </summary>
+        /// <param name="userId" example="1">ID do utilizador</param>
+        /// <returns></returns>
+        [HttpPut("{userId}/Deactivate")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -162,14 +304,18 @@ namespace EzBooking.Controllers
                 return NotFound();
             }
 
-            existingUser.status = 0;
+            if (existingUser.status == false)
+                existingUser.status = true;
+            else
+                existingUser.status = false;
+
 
 
             bool updated = _userRepo.UpdateUser(existingUser);
 
             if (updated)
             {
-                return Ok("Utilizador desativado com sucesso!");
+                return Ok("Estado do utilizador atualizado com sucesso!");
             }
             else
             {

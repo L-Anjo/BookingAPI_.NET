@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EzBooking.Models
 {
@@ -13,8 +14,13 @@ namespace EzBooking.Models
         [Required(ErrorMessage = "O campo Password é obrigatório.")]
         public string password { get; set; }
         [Required(ErrorMessage = "O campo Phone é obrigatório.")]
-        public string phone { get; set; }
+        public int phone { get; set; }
         public string? token { get; set; }
-        public int status { get; set; }
+        public bool status { get; set; }
+        public string? image { get; set; }
+        public UserTypes? userType { get; set; }
+        public ICollection<House>? Houses { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+
     }
 }

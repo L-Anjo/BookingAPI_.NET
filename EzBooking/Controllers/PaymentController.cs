@@ -18,6 +18,10 @@ namespace EzBooking.Controllers
             _paymentStateRepo = paymentStateRepo;
         }
 
+        /// <summary>
+        /// Obtém todos os pagamentos.
+        /// </summary>
+        /// <returns>Uma lista de Pagamentos.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -33,7 +37,11 @@ namespace EzBooking.Controllers
             return Ok(payments);
         }
 
-
+        /// <summary>
+        /// Cria um pagamento
+        /// </summary>
+        /// <param name="paymentCreate"></param>
+        /// <returns>Cria um pagamento</returns>
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -46,11 +54,8 @@ namespace EzBooking.Controllers
                 return BadRequest(ModelState);
 
 
-            var existingState = _paymentStateRepo.GetPaymentState(paymentCreate.id_payment);
-            if (existingState == null)
-            {
-                return NotFound("Estado do pagamento não existe");
-            }
+            var existingState = _paymentStateRepo.GetPaymentState(1);
+            paymentCreate.state = existingState;
 
             bool created = _paymentRepo.CreatePayment(paymentCreate);
 
@@ -65,6 +70,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtém um pagamento
+        /// </summary>
+        /// <param name="paymentId" example ="1">O ID do Pagamento</param>
+        /// <returns>Um pagamento</returns>
         [HttpGet("{paymentId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -81,6 +91,11 @@ namespace EzBooking.Controllers
         }
 
 
+        /// <summary>
+        /// Atualiza um pagamento
+        /// </summary>
+        /// <param name="paymentId" example="1">ID do pagamento</param>
+        /// <returns>Atualiza um pagamento</returns>
         [HttpPut("{paymentId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -115,6 +130,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Apaga um pagamento
+        /// </summary>
+        /// <param name="paymentId" example="1">ID do pagamento</param>
+        /// <returns>Exclui um pagamento</returns>
         [HttpDelete("{paymentId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

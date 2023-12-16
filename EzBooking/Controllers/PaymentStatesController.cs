@@ -16,6 +16,10 @@ namespace EzBooking.Controllers
             _paymentStateRepo = paymentStateRepo;
         }
 
+        /// <summary>
+        /// Obtém todos os estados de pagamento.
+        /// </summary>
+        /// <returns>Uma lista de estados de pagamento.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -31,6 +35,12 @@ namespace EzBooking.Controllers
             return Ok(paymentStates);
         }
 
+
+        /// <summary>
+        /// Obtém um estado de pagamento
+        /// </summary>
+        /// <param name="paymentStateId" example ="1">O ID do estado de pagamento</param>
+        /// <returns>Um estado de pagamento</returns>
         [HttpGet("{paymentStateId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -46,26 +56,30 @@ namespace EzBooking.Controllers
             return Ok(paymentState);
         }
 
-
+        /// <summary>
+        /// Cria um estado de pagamento
+        /// </summary>
+        /// <param name="paymentStateCreate"></param>
+        /// <returns>Cria um estado de pagamento</returns>
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreatePaymentStates([FromBody] PaymentStates paymentCreate)
+        public IActionResult CreatePaymentStates([FromBody] PaymentStates paymentStateCreate)
         {
-            if (paymentCreate == null)
+            if (paymentStateCreate == null)
                 return BadRequest(ModelState);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var checkState = _paymentStateRepo.CheckState(paymentCreate.state);
+            var checkState = _paymentStateRepo.CheckState(paymentStateCreate.state);
             if (checkState == true)
             {
                 ModelState.AddModelError("", "State already exists");
                 return StatusCode(422, ModelState);
             }
 
-            bool created = _paymentStateRepo.CreatePaymentStates(paymentCreate);
+            bool created = _paymentStateRepo.CreatePaymentStates(paymentStateCreate);
 
             if (created)
             {
@@ -78,6 +92,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Atualiza um estado de pagamento
+        /// </summary>
+        /// <param name="paymentStateId" example="1">ID do estado de pagamento</param>
+        /// <returns>Atualiza um estado de pagamento</returns>
         [HttpPut("{paymentStateId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -115,6 +134,11 @@ namespace EzBooking.Controllers
             }
         }
 
+        /// <summary>
+        /// Apaga um estado de pagamento
+        /// </summary>
+        /// <param name="paymentStatesId" example="1">ID do estado de pagamento</param>
+        /// <returns>Exclui um estado de pagamento</returns>
         [HttpDelete("{paymentStatesId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

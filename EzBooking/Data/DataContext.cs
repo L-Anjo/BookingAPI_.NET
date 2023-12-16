@@ -21,6 +21,10 @@ namespace EzBooking.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentStates> PaymentStates { get; set; }
 
+        public DbSet<Images> Images { get; set; }
+        public DbSet<UserTypes> UserTypes { get; set; }
+        public DbSet<RevokedTokens> RevokedTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

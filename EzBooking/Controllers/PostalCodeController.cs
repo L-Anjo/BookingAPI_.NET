@@ -18,6 +18,10 @@ namespace EzBooking.Controllers
 
         //GETS
 
+        /// <summary>
+        /// Obtém todos os Codigos Postais.
+        /// </summary>
+        /// <returns>Uma lista de Codigos Postais.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -33,6 +37,11 @@ namespace EzBooking.Controllers
             return Ok(postalcodes);
         }
 
+        /// <summary>
+        /// Obtém um Codigo Postal.
+        /// </summary>
+        /// <param name="id" example ="4750">O ID do Codigo Postal</param>
+        /// <returns>Um Codigo Postal.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -55,6 +64,10 @@ namespace EzBooking.Controllers
         }
 
         //CREATES
+        /// <summary>
+        /// Cria uma Codigo Postal.
+        /// </summary>
+        /// <returns>Um Codigo Postal.</returns>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(409)]

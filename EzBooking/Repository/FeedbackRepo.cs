@@ -1,5 +1,6 @@
 ﻿using EzBooking.Data;
 using EzBooking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EzBooking.Repository
 {
@@ -13,7 +14,9 @@ namespace EzBooking.Repository
         }
         public ICollection<Feedback> GetFeedbacks()
         {
-            return _context.Feedbacks.OrderBy(h => h.id_feedback).ToList();
+            return _context.Feedbacks.OrderBy(h => h.id_feedback)
+            .Include(h => h.Reservation)
+            .ToList();
         }
 
         public bool Save()
@@ -30,7 +33,9 @@ namespace EzBooking.Repository
 
         public Feedback GetFeedback(int feedbackId)
         {
-            return _context.Feedbacks.Where(p => p.id_feedback == feedbackId).FirstOrDefault();
+            return _context.Feedbacks.Where(p => p.id_feedback == feedbackId)
+            .Include(h => h.Reservation)
+            .FirstOrDefault(); ;
         }
 
         public bool UpdateFeedback(Feedback feedback)

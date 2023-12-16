@@ -17,7 +17,10 @@ namespace EzBooking.Controllers
         }
 
         //GETS
-
+        /// <summary>
+        /// Obtém todos os Estados Das Casas.
+        /// </summary>
+        /// <returns>Uma lista de Estados de Casas.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -33,6 +36,11 @@ namespace EzBooking.Controllers
             return Ok(statushouses);
         }
 
+        /// <summary>
+        /// Obtém um unico Estado ID.
+        /// </summary>
+        /// <param name="id" example ="1">O ID do estado do alojamento</param>
+        /// <returns>Um Estado de alojamento.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -55,6 +63,10 @@ namespace EzBooking.Controllers
         }
 
         //CREATES
+        /// <summary>
+        /// Cria um estado de Casa.
+        /// </summary>
+        /// <returns>Um Estado de Alojamento.</returns>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(409)]

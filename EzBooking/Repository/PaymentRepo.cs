@@ -1,5 +1,6 @@
 ﻿using EzBooking.Data;
 using EzBooking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EzBooking.Repository
 {
@@ -13,7 +14,9 @@ namespace EzBooking.Repository
         }
         public ICollection<Payment> GetPayments()
         {
-            return _context.Payments.OrderBy(h => h.id_payment).ToList();
+            return _context.Payments.OrderBy(h => h.id_payment)
+            .Include(h => h.state)
+            .ToList();
         }
 
         public bool Save()
@@ -30,7 +33,9 @@ namespace EzBooking.Repository
 
         public Payment GetPayment(int paymentId)
         {
-            return _context.Payments.Where(p => p.id_payment == paymentId).FirstOrDefault();
+            return _context.Payments.Where(p => p.id_payment == paymentId)
+            .Include(h => h.state)
+            .FirstOrDefault(); ;
         }
 
         public bool UpdatePayment(Payment payment)

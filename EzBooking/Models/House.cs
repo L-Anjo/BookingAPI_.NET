@@ -27,6 +27,7 @@ namespace EzBooking.Models
         [Range(1, 30, ErrorMessage = "O número de hóspedes deve ser pelo menos 1.")]
         public int guestsNumber { get; set; }
 
+        public int? rooms {  get; set; }
         [Required(ErrorMessage = "O campo Rua é obrigatório.")]
         public string road { get; set; }
 
@@ -43,7 +44,9 @@ namespace EzBooking.Models
         public PostalCode PostalCode { get; set; }
 
         public StatusHouse? StatusHouse { get; set; }
+        public ICollection<Images>? Images { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+        public User? User {  get; set; }
 
-        public byte[]? ImageData { get; set; }
     }
 }

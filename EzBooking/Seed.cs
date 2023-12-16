@@ -48,12 +48,18 @@ namespace EzBooking.Data
                 name = "Disponivel"
             };
 
+            var statusHouse3 = new StatusHouse
+            {
+                name = "Apagada"
+            };
+
             var house1 = new House
             {
                 name = "Example House 1",
                 doorNumber = 123,
                 floorNumber = 2,
                 price = 100.0,
+                rooms = 4,
                 guestsNumber = 4,
                 road = "Example Road 1",
                 propertyAssessment="dffddsf2",
@@ -68,6 +74,7 @@ namespace EzBooking.Data
                 doorNumber = 456,
                 floorNumber = 3,
                 price = 150.0,
+                rooms = 4,
                 guestsNumber = 6,
                 road = "Example Road 2",
                 propertyAssessment = "dffddsf3",
@@ -76,50 +83,108 @@ namespace EzBooking.Data
                 StatusHouse = statusHouse2
             };
 
+            var image1 = new Images
+            {
+                image = "1_0_277b4fc1-a3ff-4d70-b9bb-c06f5363be07.webp",
+                House = house1,
+            };
+            var image2 = new Images
+            {
+                image = "1_1_6c3e50db-017a-436b-83e7-158151bfe3e9.webp",
+                House = house1,
+            };
+            var image3 = new Images
+            {
+                image = "2_0_6c3e50db-017a-436b-83e7-158151bfe3e9.webp",
+                House = house2,
+            };
+
+            var userType1 = new UserTypes
+            {
+                type = "Utilizador"
+            };
+
+            var userType2 = new UserTypes
+            {
+                type = "Anunciante"
+            };
+
+            var userType3 = new UserTypes
+            {
+                type = "Admin"
+            };
+
+            var password1 = "password";
+            var password2 = "password2";
+            var password3 = "password3";
+
+            string hashedPassword1 = BCrypt.Net.BCrypt.HashPassword(password1);
+            string hashedPassword2 = BCrypt.Net.BCrypt.HashPassword(password2);
+            string hashedPassword3 = BCrypt.Net.BCrypt.HashPassword(password3);
+
             var user1 = new User
             {
                 name = "Pedro",
                 email = "pedro@alunos.ipca.pt",
-                password = "password",
-                phone = "123456789",
-                token = "SDAD3Dasdsa2D2DAasdsASD",
-                status = 1
+                password = hashedPassword1,
+                phone = 123456789,
+                token = null,
+                status = true,
+                image = null,
+                userType = userType1
             };
 
             var user2 = new User
             {
                 name = "Luis",
                 email = "luis@alunos.ipca.pt",
-                password = "password2",
-                phone = "987654321",
-                token = "SADassadw232esadDSADAds-2",
-                status = 1
+                password = hashedPassword2,
+                phone = 987654321,
+                token = null,
+                status = true,
+                image = null,
+                userType = userType2
             };
 
             var user3 = new User
             {
                 name = "Diogo",
                 email = "diogo@alunos.ipca.pt",
-                password = "password3",
-                phone = "12345432",
-                token = "DSADxsxDDDDsXseee321",
-                status = 1
+                password = hashedPassword3,
+                phone = 12345432,
+                token = null,
+                status = true,
+                image = null,
+                userType = userType3
             };
 
             var statusReservation1 = new ReservationStates
             {
+                state = "Pendente"
+            };
+            var statusReservation2 = new ReservationStates
+            {
+                state = "Aprovada (USO)"
+            };
+            var statusReservation3 = new ReservationStates
+            {
+                state = "Completa"
+            };
+            var statusReservation4 = new ReservationStates
+            {
+                state = "Avaliada"
+            };
+            var statusReservation5 = new ReservationStates
+            {
                 state = "Cancelada"
             };
 
-            var statusReservation2 = new ReservationStates
-            {
-                state = "Andamento"
-            };
 
             var reservation1 = new Reservation
             {
-                init_date = DateTime.Now,
-                end_date = new DateTime(2023, 11, 14),
+                init_date = new DateTime(2023, 11, 18),
+                end_date = new DateTime(2023, 11, 20),
+                guestsNumber = 1,
                 User = user1,
                 House = house1,
                 ReservationStates = statusReservation1
@@ -127,8 +192,9 @@ namespace EzBooking.Data
 
             var reservation2 = new Reservation
             {
-                init_date = DateTime.Now,
-                end_date = new DateTime(2023, 11, 16),
+                init_date = new DateTime(2023, 11, 18),
+                end_date = new DateTime(2023, 11, 22),
+                guestsNumber = 2,
                 User = user2,
                 House = house2,
                 ReservationStates = statusReservation2
@@ -138,6 +204,7 @@ namespace EzBooking.Data
             {
                 init_date = new DateTime(2023, 11, 18),
                 end_date = new DateTime(2023, 11, 23),
+                guestsNumber = 3,
                 User = user3,
                 House = house2, 
                 ReservationStates = statusReservation1
@@ -147,19 +214,22 @@ namespace EzBooking.Data
             var feedback1 = new Feedback
             {
                 classification = 5,
-                comment = "Muito bom!"
+                comment = "Muito bom!",
+                Reservation = reservation1,
             };
 
             var feedback2 = new Feedback
             {
                 classification = 3,
-                comment = "Razoável!"
+                comment = "Razoável!",
+                Reservation = reservation2
             };
 
             var feedback3 = new Feedback
             {
                 classification = 1,
-                comment = "Terrível!"
+                comment = "Terrível!",
+                Reservation = reservation3
             };
 
             var paymentState1 = new PaymentStates
@@ -183,7 +253,8 @@ namespace EzBooking.Data
                 paymentDate = DateTime.Now,
                 paymentMethod = "MbWay",
                 paymentValue = 341,
-                state = paymentState1
+                state = paymentState1,
+                Reservation = reservation1
             };
 
             var payment2 = new Payment
@@ -192,7 +263,8 @@ namespace EzBooking.Data
                 paymentDate = DateTime.Now,
                 paymentMethod = "Paypal",
                 paymentValue = 187,
-                state = paymentState2
+                state = paymentState2,
+                Reservation = reservation2
             };
 
             var payment3 = new Payment
@@ -201,19 +273,21 @@ namespace EzBooking.Data
                 paymentDate = DateTime.Now,
                 paymentMethod = "Multibanco",
                 paymentValue = 900,
-                state = paymentState3
+                state = paymentState3,
+                Reservation = reservation3
             };
 
             dataContext.PostalCodes.AddRange(postalCode1, postalCode2);
-            dataContext.StatusHouses.AddRange(statusHouse1, statusHouse2);
+            dataContext.StatusHouses.AddRange(statusHouse1, statusHouse2, statusHouse3);
             dataContext.Houses.AddRange(house1, house2);
+            dataContext.UserTypes.AddRange(userType1, userType2, userType3);
             dataContext.Users.AddRange(user1, user2, user3);
             dataContext.Feedbacks.AddRange(feedback1, feedback2, feedback3);
             dataContext.PaymentStates.AddRange(paymentState1, paymentState2, paymentState3);
             dataContext.Payments.AddRange(payment1, payment2, payment3);
-            
+            dataContext.Images.AddRange(image1,image2,image3);
 
-            dataContext.ReservationStates.AddRange(statusReservation1, statusReservation2);
+            dataContext.ReservationStates.AddRange(statusReservation1, statusReservation2, statusReservation3, statusReservation4, statusReservation5);
             dataContext.Reservations.AddRange(reservation1, reservation2, reservation3);
 
             dataContext.SaveChanges();

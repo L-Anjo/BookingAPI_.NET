@@ -1,5 +1,6 @@
 using EzBooking.Data;
 using EzBooking.Models;
+using System.Data;
 
 namespace EzBooking.Repository
 {
@@ -11,11 +12,33 @@ namespace EzBooking.Repository
         {
             _context = context;
         }
+        public ICollection<ReservationStates> GetReservationStates()
+        {
+            return _context.ReservationStates
+                .OrderBy(rs => rs.id)
+                .ToList();
+        }
 
         public ReservationStates GetReservationStatesById(int id)
         {
             return _context.ReservationStates
-                .FirstOrDefault(p => p.id == id);
+                .FirstOrDefault(rs => rs.id == id);
+        }
+
+        public bool CreateReservationStates(ReservationStates reservationStates)
+        {
+            _context.Add(reservationStates);
+            return Save();
+        }
+
+        public bool ReservationStatesExists(string reservationStates)
+        {
+            return _context.ReservationStates.Any(rs => rs.state == reservationStates);
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

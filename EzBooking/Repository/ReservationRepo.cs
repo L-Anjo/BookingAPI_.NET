@@ -12,32 +12,48 @@ namespace EzBooking.Repository
             _context = context;
 
         }
-        public ICollection<Reservation> GetReservations()
+        public async Task<ICollection<Reservation>> GetReservations()
         {
-                return _context.Reservations
+                return await _context.Reservations
                 .Include(r => r.House)
                 .Include(r => r.User)
                 .Include(r => r.ReservationStates)
                 .OrderBy(r => r.id_reservation)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Reservation GetReservationById(int id)
+        public async Task<Reservation> GetReservationById(int id)
         {
-            return _context.Reservations
+            return await _context.Reservations
                 .Include(r => r.House)
                 .Include(r => r.User)
                 .Include(r => r.ReservationStates)
-                .FirstOrDefault(r => r.id_reservation == id);
+                .FirstOrDefaultAsync(r => r.id_reservation == id);
 
         }
 
-        public bool CreateReservation(Reservation reservation)
+        public async Task<bool> CreateReservation(Reservation reservation)
         {
-            _context.Add(reservation);
+            await _context.AddAsync(reservation);
             return Save();
         }
 
+        //public async Task UpdateStateReservationsByDates()
+        //{
+        //    var now = DateTime.UtcNow;
+
+        //    var expiredReservations = await _context.Reservations
+        //        .Where(r => r.ReservationStates.id == 2 && r.end_date <= now)
+        //        .ToListAsync();
+
+        //    foreach (var reservation in expiredReservations)
+        //    {
+        //        reservation.ReservationStates.id = 3; 
+        //        _context.Entry(reservation).State = EntityState.Modified;
+        //    }
+
+        //    await _context.SaveChangesAsync();
+        //}
 
         public bool Save()
         {
@@ -51,7 +67,7 @@ namespace EzBooking.Repository
         }
 
 
-        //UPDATE E DELETE MAL
+        //UPDATE E DELETE 
         public bool UpdateReservation(Reservation reservation)
         {
 
@@ -65,5 +81,42 @@ namespace EzBooking.Repository
             return Save();
         }
 
+        // VALIDAR DATA DE RESERVA
+        public async Task<bool> ValidateReservationDate(Reservation reservation)
+        {
+            var reservations = await _context.Reservations
+                //.Where(r => r.House == reservation.House && r.ReservationStates.state != 1)
+                .Where(r => r.House == reservation.House)
+                .ToListAsync();
+
+            foreach (Reservation r in reservations)
+            {
+                if (r.init_date < reservation.end_date && r.end_date > reservation.init_date)
+                {
+                    return false; // As datas sobrepõem, logo não estão disponíveis
+                }
+            }
+
+            return true; // As datas estão disponíveis
+        }
+
+
+
+        //CALCULAR PRECO TOTAL
+        public async Task<double?> CalculateTotalPrice(Reservation reservation)
+        {
+            double? priceNight = reservation.House.price;
+
+            DateTime checkInDate = reservation.init_date;
+            DateTime checkOutDate = reservation.end_date;
+            //int nights = Math.Floor((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+            TimeSpan difference = checkOutDate - checkInDate;
+            int nights = (int)Math.Ceiling(difference.TotalDays); // Usando Ceiling para arredondar para cima
+
+
+            double? total = priceNight * nights;
+
+            return total;
+        }
     }
 }

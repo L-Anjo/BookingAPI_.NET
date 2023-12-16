@@ -24,6 +24,7 @@
 
         public const int ClassificationExample = 5;
         public const string CommentExample = "Adorei";
+        public const int ReservationFeedbackExample = 1;
 
         public const int postalCode = 4750;
         public const string concelho = "Barcelos";
@@ -41,6 +42,16 @@
 
         public const string EmailExample = "robertorodrigues@gmail.com";
         public const string PasswordExample = "robertorodrigues123";
+
+        // Exemplos para as Reservas
+        public static readonly DateTime InitDateExample = new DateTime(2023, 12, 20);
+        public static readonly DateTime EndDateExample = new DateTime(2023, 12, 31);
+        public const int GuestNumResExample = 3;
+
+        //Exemplos para os UserTypes
+        public const string TypeExample = "Utilizador";
+
+
         // Adicione exemplos para outras propriedades aqui...
     }
 }

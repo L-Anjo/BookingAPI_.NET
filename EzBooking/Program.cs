@@ -1,13 +1,14 @@
 using EzBooking.Data;
 using EzBooking.Repository;
-using EzBooking.SwaggerExamples;
-//using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
-//using Microsoft.AspNetCore.Authentication.JwtBearer;
-//using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Reflection;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,8 @@ builder.Services.AddScoped<UserRepo>();
 builder.Services.AddScoped<ReservationRepo>();
 builder.Services.AddScoped<ReservationStatesRepo>();
 builder.Services.AddScoped<FeedbackRepo>();
+builder.Services.AddScoped<ImageRepo>();
+builder.Services.AddScoped<UserTypesRepo>();
 
 builder.Services.AddMvc();
 builder.Services.AddDirectoryBrowser();
@@ -32,17 +35,17 @@ builder.Services.AddDirectoryBrowser();
 
 
 
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuerSigningKey = true,
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-//            ValidateIssuer = false,
-//            ValidateAudience = false
-//        };
-//    });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -52,11 +55,17 @@ builder.Services.AddSwaggerGen(c =>
 
     c.SchemaFilter<ExamplesSchemaFilter>();
     // Adicione esta linha para incluir os exemplos
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+
+
 });
-//builder.Services.AddDbContext<DataContext>(options =>
-//{
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
-//});
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+});
+
 
 
 builder.Services.AddSwaggerGen(c =>
@@ -86,7 +95,19 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler =
+    ReferenceHandler.IgnoreCycles;
+});
+
+
+
 var app = builder.Build();
+
 
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
@@ -111,9 +132,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+//Publica pasta images
+app.UseStaticFiles();
+
 
 app.MapControllers();
 
